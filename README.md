@@ -15,7 +15,7 @@
 
 ### Packages:
 
-* IMP: 
+IMP: 
 * [reference guide documentation](https://integrativemodeling.org/2.12.0/doc/ref/), parece ser que IMP ya utiliza modeller de por si.
 * [IMP tutorial](https://integrativemodeling.org/2.4.0/doc/tutorial/library.html) 
 * Units: angstrom for all distances,kcal/molÅ for forces/derivatives,kcal/mol for energies,radians for angles,all angles are counterclockwise,all charges are in units of the elementary charge,all times are in femtoseconds
