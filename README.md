@@ -41,4 +41,4 @@ For our particular case in which we will be using PDB files as inputs, I was thi
 1) Obtained the 2 separated sequences from each part of the complex (i.e. the protein and ligand) construct a tensor with a fixed length (the length of the longer sequence, we need to define which can be a good cut off) x 20 (the amount of aminoacids) 
 2) To represent each of the peptide sequences, by using the PSSM files generated from PSI-BLAST with the option **-out_ascii_pssm** to obtain the specific sequence profile [like this one](./Files/ascii_target.pssm)
 3) Clean-up a bit the file (removing headers, amino acid references of columns and footer information) before use it for training
-
+4) As we can not use tensors with integers, the best approach is to transform them (vectorization) in a improved representative manner
