@@ -23,7 +23,8 @@
 * Units: angstrom for all distances,kcal/molÅ for forces/derivatives,kcal/mol for energies,radians for angles,all angles are counterclockwise,all charges are in units of the elementary charge,all times are in femtoseconds
 
 ## PDB
-[PDB format](https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html)
+* [PDB format structure](https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html)
+* [BioPDB python module documentation](https://biopython.org/wiki/The_Biopython_Structural_Bioinformatics_FAQ)
 
 
 Las compañeras de segundo me han dicho (literalmente): Nosotras al final desarrollamos un algoritmo bastante chulo (en mi opinión) pero lo único que al final importó fue que funcione con estructuras cuanto más complejas y que lo haga en un tiempo razonable tipo un par de horas (por Baldo) y que se usen todas las herramientas aprendidas en la asignatura de python (para Javi).
