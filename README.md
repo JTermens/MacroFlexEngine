@@ -12,7 +12,7 @@
 * [Tensorflow Based Deep Learning Model and Snakemake Workflow for Peptide-Protein Binding Predictions](https://www.biorxiv.org/content/10.1101/410928v3)
 * [Comparing two deep learning sequence-based models for protein-protein interaction prediction](https://arxiv.org/abs/1901.06268)
 * [OnionNet: a Multiple-Layer Intermolecular-Contact-Based Convolutional Neural Network for Protein–Ligand Binding Affinity Prediction](https://pubs.acs.org/doi/full/10.1021/acsomega.9b01997#)
-* [Predicting protein–protein interactions throughsequence-based deep learning](https://academic.oup.com/bioinformatics/article/34/17/i802/5093239)
+* [Predicting protein–protein interactions through sequence-based deep learning](https://academic.oup.com/bioinformatics/article/34/17/i802/5093239)
 * [Protein-Protein Interaction Interface Residue Pair Prediction Based on Deep Learning Architecture](https://ieeexplore.ieee.org/document/7932134)
 
 ## Packages
