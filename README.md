@@ -37,7 +37,7 @@ For our particular case in which we will be using PDB files as inputs, I was thi
 2) With that information we need to create tensors (vector information representation) to input our model training in a way that makes sense (could be matrices of 1s and 0s, it's the most used solution)
 3) Separate sets of test data and training data *which can not be the same*, using training data to test the model (or viceversa) can cause overfitting 
 
-##### OPTION 2
+##### OPTION 2 (https://github.com/hashemifar/DPPI)
 1) Obtained the 2 separated sequences from each part of the complex (i.e. the protein and ligand) construct a tensor with a fixed length (the length of the longer sequence, we need to define which can be a good cut off) x 20 (the amount of aminoacids) 
 2) To represent each of the peptide sequences, by using the PSSM files generated from PSI-BLAST with the option **-out_ascii_pssm** to obtain the specific sequence profile [like this one](./Files/ascii_target.pssm)
 3) Clean-up a bit the file (removing headers, amino acid references of columns and footer information) before use it for training
