@@ -14,6 +14,8 @@
 * [OnionNet: a Multiple-Layer Intermolecular-Contact-Based Convolutional Neural Network for Protein–Ligand Binding Affinity Prediction](https://pubs.acs.org/doi/full/10.1021/acsomega.9b01997#)
 * [Predicting protein–protein interactions through sequence-based deep learning](https://academic.oup.com/bioinformatics/article/34/17/i802/5093239)
 * [Protein-Protein Interaction Interface Residue Pair Prediction Based on Deep Learning Architecture](https://ieeexplore.ieee.org/document/7932134)
+* [AlphaFold - Improved protein structure prediction using potentials from deep learning](./Files/AlphaFold.pdf) -->
+_This last one can be used to understand the input formats and how to codify them (as they use PSSM, PDBs and also HMM files to train their model)_
 
 ## Packages
 
