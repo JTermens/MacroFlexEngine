@@ -3,10 +3,13 @@
 # normalize with an integer dictionary the columns that are not numbers (to integers)
 # normalize all data to contain float32 values between 0 and 1 (SD = 1, Mean= 0)
 import os
+import numpy as np
 from dictionary import atoms_name_dict, residues_code_dict, symbols_dict
 
 directory = './Files/PDBs'
+directory_chains = './Files/PDBs/Chains'
 files = os.listdir(directory)
+folders = next(os.walk(directory_chains))[1]
 
 
 def read_pdb_to_create_dict():
@@ -39,22 +42,28 @@ def read_pdb_to_create_dict():
 
 
 def pre_process_pdb_into_vectors():
-    pdb_files = []
-    for pdb_file in files[:10]:
-        if pdb_file.endswith('.pdb'):
-            pdb_vectors = []
-            current_pdb_file = open(f'{directory}/{pdb_file}', 'r')
-            pdb_content = current_pdb_file.readlines()
+    all_pdbs = np.array([])
+    for folder in folders[:10]:
+        all_chains_pdb = np.array([])
+        for pdb_file in os.listdir(f'{directory_chains}/{folder}'):
+            if pdb_file.endswith('.pdb'):
+                single_pdb = np.array([])
+                current_pdb_file = open(f'{directory_chains}/{folder}/{pdb_file}', 'r')
+                pdb_content = current_pdb_file.readlines()
 
-            for line in pdb_content:
-                if line.startswith('ATOM'):
-                    pdb_vector = get_line_data_as_vector(line)
-                    pdb_vectors.append(pdb_vector)
+                for line in pdb_content:
+                    if line.startswith('ATOM'):
+                        pdb_line = get_line_data_as_vector(line)
+                        np.append(single_pdb, pdb_line)
 
-        if pdb_vectors:
-            pdb_files.append(pdb_vectors)
+            if single_pdb:
+                np.append(all_chains_pdb, single_pdb)
 
-    return pdb_files
+        np.append(all_chains_pdb, all_pdbs)
+
+    print(f'SHAPE - {np.shape(all_pdbs)}')
+    print(all_pdbs)
+    return all_pdbs
 
 
 def get_line_data_as_vector(line):
@@ -62,16 +71,15 @@ def get_line_data_as_vector(line):
     atom_serial_number = float(line[6:12])
     atom_name = atoms_name_dict.get(line[12:17].strip())
     residue_name = residues_code_dict.get(line[17:20].strip())
-    chain = ord(line[21:22].strip())
+    chain = ord(line[21:22])
     residue_seq_number = float(line[22:26])
     x_orthogonal = float(line[30:38])
     y_orthogonal = float(line[38:46])
     z_orthogonal = float(line[46:54])
     occupancy = float(line[54:60])
     temp_factor = float(line[60:66])
-    element_symbol = symbols_dict.get(line[76:78].strip())
     pdb_vector = [atom, atom_serial_number, atom_name, residue_name, chain, residue_seq_number,
-                  x_orthogonal, y_orthogonal, z_orthogonal, occupancy, temp_factor, element_symbol]
+                  x_orthogonal, y_orthogonal, z_orthogonal, occupancy, temp_factor]
 
     return pdb_vector
 
