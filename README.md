@@ -24,6 +24,9 @@ _This last one can be used to understand the input formats and how to codify the
 * [IMP tutorial](https://integrativemodeling.org/2.4.0/doc/tutorial/library.html) 
 * Units: angstrom for all distances,kcal/molÅ for forces/derivatives,kcal/mol for energies,radians for angles,all angles are counterclockwise,all charges are in units of the elementary charge,all times are in femtoseconds
 
+### Superimposition 
+* [superimpostion and rmsd library](https://pypi.org/project/rmsd/)
+
 ## PDB
 * [PDB format structure](https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html)
 * [BioPDB python module documentation](https://biopython.org/wiki/The_Biopython_Structural_Bioinformatics_FAQ)
