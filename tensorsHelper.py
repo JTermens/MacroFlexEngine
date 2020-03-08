@@ -5,11 +5,9 @@
 import os
 from dictionary import atoms_name_dict, residues_code_dict, symbols_dict
 
-directory = './Files/PDBs'
-files = os.listdir(directory)
 
-
-def read_pdb_to_create_dict():
+def read_pdb_to_create_dict(directory):
+    files = os.listdir(directory)
     atom_name_data = {}
     residues_data = {}
     element_symbol_data = {}
@@ -38,11 +36,12 @@ def read_pdb_to_create_dict():
     print(dict_atoms_name)
 
 
-def pre_process_pdb_into_vectors():
+def pre_process_pdb_into_vectors(directory, single):
+    files = os.listdir(directory)
     pdb_files = []
-    for pdb_file in files[:10]:
+    for pdb_file in files:
+        pdb_vectors = []
         if pdb_file.endswith('.pdb'):
-            pdb_vectors = []
             current_pdb_file = open(f'{directory}/{pdb_file}', 'r')
             pdb_content = current_pdb_file.readlines()
 
@@ -53,6 +52,8 @@ def pre_process_pdb_into_vectors():
 
         if pdb_vectors:
             pdb_files.append(pdb_vectors)
+        if single:
+            return pdb_vectors
 
     return pdb_files
 

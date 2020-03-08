@@ -1,7 +1,8 @@
 import numpy as np
 from tensorsHelper import pre_process_pdb_into_vectors, normalize_vector_of_int
+directory = './Files/PDBs'
 
-pdb_vectors = pre_process_pdb_into_vectors()
+pdb_vectors = pre_process_pdb_into_vectors(directory, False)
 
 pdb_vectors_normalized = []
 for pdb_vector in pdb_vectors:
@@ -9,4 +10,4 @@ for pdb_vector in pdb_vectors:
     pdb_vectors_normalized.append(pdb_vec_normalized)
 
 np_pdb_normalized_vector = np.array(pdb_vectors_normalized)
-print(np_pdb_normalized_vector.ndim)
+print(np_pdb_normalized_vector)
