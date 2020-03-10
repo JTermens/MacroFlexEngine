@@ -25,8 +25,8 @@ import Bio.PDB
 sp_chain = "A"
 
 parser = Bio.PDB.PDBParser()
-structure1 = parser.get_structure('4g83A-B', "rot_4g83A-B.pdb")
-structure2 = parser.get_structure('4g83A-EF', "4g83A-EF.pdb")
+structure1 = parser.get_structure('4g83A-B', "pdb/rot_4g83A-B.pdb")
+structure2 = parser.get_structure('4g83A-EF', "pdb/4g83A-EF.pdb")
 
 sp1 = []
 sp2 = []
