@@ -3,7 +3,7 @@
 Con lo que hoy hemos hablado el programa tendrá dos fases: _superimposition_ y _modelling_. La _superimosition_ se llevará a cabo siempre con los PDBs dados como imput y, si procede, la estequiometría. El _modelling_ se llevará a cabo si se ha introducido una cadena en formato FASTA en la que se encuentran zonas sin estructura, es decir, se "escaneará" la sequencia FASTA en busca de que zonas se encuentren en los PBDs dados (y cuantas veces) y se separarán las zonas que no tengan estructura. En estas se dará un modelado, ya sea con NN, `Modeller`, `iTASER` o lo que podamos. Yo propongo lo siguiente (en pseudocódigo):
 
 ```
-*funciton* BuildComplex(PDBs, stequiometry = *None*, FASTA = *None*):
+*function* BuildComplex(PDBs, stequiometry = *None*, FASTA = *None*):
     if (FASTA is not *None*):
         FASTA_stequiometry, not_struct_zones = scan(PDBs,FASTA)
         if (FASTA_stequiometry != stequiometry):
