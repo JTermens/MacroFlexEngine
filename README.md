@@ -25,11 +25,21 @@ Como ven faltan muchos detalles, pero creo que el esqueleto podría ser algo as�
 
 ---
 
+## Temas de Python 
+* Clases (objects,inheritance...)
+* Exception handling 
+* Argparse (añadir flags)
+* Create packages
+* Graphical Interfaces (Tkinter)
+* Libraries:Biopython,numpy,matplotlib,scipy...
+
+
 ## Options
 
 * Modeller, IMP, X3DNA
 * Structural superimposition – random sampling
 * Deep learning
+* Creating documentation (docstring)
 
 ## Papers to read
 
