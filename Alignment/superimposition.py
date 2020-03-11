@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import Bio.PDB
+from Bio import PDB
 
 sp_chain = "A"
 
-parser = Bio.PDB.PDBParser()
+parser = PDB.PDBParser()
 structure1 = parser.get_structure('4g83A-B', "pdb/rot_4g83A-B.pdb")
 structure2 = parser.get_structure('4g83A-EF', "pdb/4g83A-EF.pdb")
 
@@ -36,26 +36,26 @@ for model in structure1:
         if chain.get_id() == sp_chain:
             for residue in chain:
                 for atom in residue:
-                     sp1.append(atom)
+                    sp1.append(atom)
 
 for model in structure2:
     for chain in model:
         if chain.get_id() == sp_chain:
             for residue in chain:
-                for atom in residue: 
-                     sp2.append(atom)
+                for atom in residue:
+                    sp2.append(atom)
 
 # Now we initiate the superimposer:
-super_imposer = Bio.PDB.Superimposer()
-super_imposer.set_atoms(sp1,sp2)
+super_imposer = PDB.Superimposer()
+super_imposer.set_atoms(sp1, sp2)
 super_imposer.apply(structure2.get_atoms())
 
 # Print RMSD:
-print (super_imposer.rms)
+print(super_imposer.rms)
 
 # Save the aligned version of 1UBQ.pdb
-io = Bio.PDB.PDBIO()
-io.set_structure(structure2) 
+io = PDB.PDBIO()
+io.set_structure(structure2)
 io.save("s2.pdb")
-io.set_structure(structure1) 
+io.set_structure(structure1)
 io.save("s1.pdb")
