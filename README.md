@@ -67,6 +67,10 @@ _This last one can be used to understand the input formats and how to codify the
 * [BioPDB python module documentation](https://biopython.org/wiki/The_Biopython_Structural_Bioinformatics_FAQ)
 
 
+## Example
+
+* [Prada's work](https://github.com/pradas/macromaker)
+
 Las compañeras de segundo me han dicho (literalmente): Nosotras al final desarrollamos un algoritmo bastante chulo (en mi opinión) pero lo único que al final importó fue que funcione con estructuras cuanto más complejas y que lo haga en un tiempo razonable tipo un par de horas (por Baldo) y que se usen todas las herramientas aprendidas en la asignatura de python (para Javi).
 
 ### Deep Learning approach
