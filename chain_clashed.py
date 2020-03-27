@@ -1,8 +1,34 @@
+
+
 import numpy as np
 from Bio.PDB import NeighborSearch, PDBParser, Selection, Superimposer
 from Bio.PDB.Polypeptide import PPBuilder
 
 import center_of_mass as cm
+
+
+##### Pseudocodigo
+
+# Inputs: PDB list, Fasta, flags (verbose, etc)
+#
+# 1r paso: parsear los PDB -> chains {id_chain: object}, interactions, dimers -> lista chains, interactions
+# (2n parsear fasta -> encontrart las zonas sin estructura, comparando con las chains y modelarlas)
+# -> añadimos a chains, interactions, etc.
+#
+# encontrar homologs por cada chain
+# 
+# tomar 1r dimero -> contruir ProtComplex -> model
+# 
+# clahed = False
+# while !clahed:
+#     model-> homolog chains of last dimer -> fixed chain
+#     for each chain:
+#          try superimpose -> append(score)
+#     
+#     target chain -> chain con max score
+#     do superimpose
+#     clashed = self.is_clahed(target_chain)
+# Si hay clashes en una cierta cadena, provar otra, hasta que todas generen clash
 
 
 class ProtComplex(object):
@@ -16,7 +42,7 @@ class ProtComplex(object):
         """This function returns True if the number of detected clashed is grater than max_clashes 
         and False otherwise"""
 
-        num_clashes = 0
+        num_clashes = 0 # starts a counter
 
         if verbose:
             print("Analysing possible chain clashes")
