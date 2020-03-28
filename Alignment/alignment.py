@@ -11,7 +11,7 @@ def align(chain1,chain2):
 		sequence1 = pp.get_sequence()	
 	for pp in ppb.build_peptides(chain2):
 		sequence2 = pp.get_sequence()
-	alignment = Bio.pairwise2.align.globalxx(sequence1, sequence2)
+	alignment = Bio.pairwise2.align.globalxx(sequence1, sequence2) # just proteins
 	return alignment
 
 def superimposition(homo_chains,structure1,structure2):

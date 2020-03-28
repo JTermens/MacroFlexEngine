@@ -19,15 +19,15 @@ import center_of_mass as cm
 # 
 # tomar 1r dimero -> contruir ProtComplex -> model
 # 
-# clahed = False
-# while !clahed:
+# clashed = False
+# while !clashed:
 #     model-> homolog chains of last dimer -> fixed chain
 #     for each chain:
 #          try superimpose -> append(score)
 #     
 #     target chain -> chain con max score
 #     do superimpose
-#     clashed = self.is_clahed(target_chain)
+#     clashed = self.is_clashed(target_chain)
 # Si hay clashes en una cierta cadena, provar otra, hasta que todas generen clash
 
 
@@ -44,7 +44,7 @@ class ProtComplex(object):
 
         num_clashes = 0 # starts a counter
 
-        if verbose:
+        if self.verbose:
             print("Analysing possible chain clashes")
 
         model_atoms = Selection.unfold_entities(list(self.model.get_atoms()), 'A')
@@ -56,7 +56,7 @@ class ProtComplex(object):
         close_atoms_chain = neighbor_search.search(center, max_radius+2) #add two amstrongs to the max radius
 
         if close_atoms_chain:
-            if verbose:
+            if self.verbose:
                 print(len(close_atoms_chain)," clash candidates found")
 
             neighbor_search = NeighborSearch(close_atoms_chain)
@@ -68,7 +68,7 @@ class ProtComplex(object):
                     if close_atoms_atom:
                         num_clashes +=1
                         if num_clashes >= max_clashes:
-                            if verbose:
+                            if self.verbose:
                                 print("WARNING: ",num_clashes," clashes found, CHANGEING CHAIN")
                             return True
         return False
