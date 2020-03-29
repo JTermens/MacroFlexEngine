@@ -1,8 +1,8 @@
 import copy
 import os
-import MacroFlexEngine.lib.utils as utils
-from MacroFlexEngine.lib.chain import Chain
-from MacroFlexEngine.lib.complex import Complex
+import Final.lib.utils as utils
+from Final.lib.chain import Chain
+from Final.lib.complex import Complex
 
 
 class Interactions(object):
