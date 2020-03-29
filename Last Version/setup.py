@@ -1,0 +1,21 @@
+import setuptools
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
+    name="MacroFlexEngine",
+    version='1.0',
+    description='Protein-Protein and Protein-DNA/RNA Complex Builder',
+    author='Miguel Luengo, Natalia Pattarone, Joan Termens',
+    author_email='our emails - TBC',
+    url='GitHub Project URL',
+    packages = ['MacroFlexEngine', 'MacroFlexEngine.lib'],
+    scripts = ['MacroFlexEngine.py'],
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires='>=3.6',
+)
