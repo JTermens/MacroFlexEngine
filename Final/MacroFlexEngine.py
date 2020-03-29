@@ -106,9 +106,33 @@ class MacroFlexEngine(object):
                         return len(self.model)
         return len(self.model)
 
-    def __Miguel_superimposition(self):
+    def __do_superimpose(self,fixed_chain,target_chain,moved_chain):
         # Here Migue should put his adapted code to handle 3 chains as input
-        return True
+
+        fixed_atoms = []
+        target_atoms = []  
+        
+        for atom in fixed_chain.get_atoms():
+            fixed_atoms.append(atom)
+
+        for atom in target_chain.get_atoms():
+            target_atoms.append(atom)
+
+        if len(fixed_atoms) > len(target_atoms):
+            fixed_atoms = fixed_atoms[0:len(target_atoms)]
+
+        if len(fixed_atoms) < len (target_atoms):
+            target_atoms = target_atoms[0:len(fixed_atoms)]
+
+        super_imposer = Superimposer()
+        super_imposer.set_atoms(fixed_atoms, target_atoms)
+        
+        moved_chain_atoms = []
+
+        for residues in moved_chain:
+            moved_chain_atoms.append(residues)
+
+        super_imposer.apply(moved_chain_atoms)
 
     # -------------------Joan logic from chain_clashed.py
     def __determine_clashes(self, chain, max_clashes=10):
