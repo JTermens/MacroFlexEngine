@@ -6,7 +6,8 @@ class Chain(object):
     """Class to save the homologous chains of the chain"""
 
     def __init__(self, label, parent):
-        """Creator of Chain class
+        """
+        Creator of Chain class
         Arguments:
          - label - string, the label of the chain
          - parent - Complex, the complex instance of the parent
@@ -21,14 +22,16 @@ class Chain(object):
         return len(self.homologous_chains)
 
     def __get_nucleotides(self, chain):
-        """Returns the nucleotide sequence of a chain
+        """
+        Returns the nucleotide sequence of a chain
         Arguments:
          - chain - Bio.PDB.Chain, the chain containing nucleotides
         """
         return "".join([x.resname.strip() for x in chain.child_list])
 
     def __get_homologous_tuples(self, interactions, identity=1.0):
-        """Returns a tuple with the type of chain and a list of its homologous chains,
+        """
+        Returns a tuple with the type of chain and a list of its homologous chains,
         with an identity treshold
         Arguments:
          - interactions - dict, the dict conteining all the interactions
@@ -63,7 +66,8 @@ class Chain(object):
         return (chain_type, tuple_list)
 
     def get_homologous_chains(self, interactions, score_limit=9.8):
-        """Returns a tuple with the type of chain and a list of its homologous chains,
+        """
+        Returns a tuple with the type of chain and a list of its homologous chains,
         with an identity treshold
         Arguments:
          - interactions - dict, the dict conteining all the interactions

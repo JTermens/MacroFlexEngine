@@ -1,8 +1,12 @@
 import copy
 import numpy as np
-import center_of_mass as cm
-from Final.lib.dictionary import chain_dict
+
 from Bio.PDB import NeighborSearch, PDBParser, Selection
+
+import Final.lib.center_of_mass as cm
+import Final.lib.interactions as intrc
+
+from Final.lib.dictionary import chain_dict
 from Final.lib.utils import output_print
 
 
@@ -13,16 +17,28 @@ class MacroFlexEngine(object):
         """Constructor MacroFlexEngine class"""
         self.model = None
         self.to_evaluate = None
-        self.interactions = inter.Interactions()
+        self.interactions = intrc.ChainInteractions()
         self.codes_used = None
         self.verbose = verbose
 
     def construct_engine(self, input_folder, max_chains=200):
-        """Retruns a Bio.PDB.Structure composed by complex pairs.
+        """
+        Retruns a Bio.PDB.Structure composed by complex pairs.
         Arguments:
-            - input_folder - string, folder containing a list of complex pairs
+            - input_folder - string, a folder containing a list of complex pairs
             - max_chains (optional) - int, maximum number of chains
         """
+
+        #------------------------------------------------------------------------------------------
+        # PROPUESTA IMPLEMENTACION MODELER
+        # 
+        # if fasta files in input folder:
+        #   for each fasta file:
+        #       identify chains without structure -> run modeler
+        #       identify chains with structure
+        #       populate interactions with the newly modeled chains and the ones with structure
+        #------------------------------------------------------------------------------------------
+
         self.interactions.populate_interactions(input_folder)
         self.interactions.populate_homologous_chains(score_limit=9.8)
 
@@ -31,8 +47,7 @@ class MacroFlexEngine(object):
         parser = PDBParser()
         chain_number = 2
 
-        if self.verbose:
-            print("Starting the build...")
+        output_print("Initializing the builder engine...",verbose)
 
         structure = None
         while chain_number == 2:
@@ -44,13 +59,13 @@ class MacroFlexEngine(object):
             self.codes_used = None
 
             chain_number = self.__process_chains(max_chains)
-        if self.verbose:
-            print("Model ended.")
+        output_print("Model ended", verbose)
         return structure
 
 
     def __process_chains(self, max_chains):
-        """Add chains to a model and return the number of final chains.
+        """
+        Add chains to a model and return the number of final chains.
         Arguments:
             - max_chains - int (optional), maximum number of chains of the model
         """
@@ -74,9 +89,9 @@ class MacroFlexEngine(object):
                 # -----------------------------------------------------------------------------
 
                 # -----------------------------------------------------------------------------
-                # TODO: Here we need to connect Joan logic for clashes, proposed connection commented below
+                # RESOLVED! TODO: Here we need to connect Joan logic for clashes, proposed connection commented below
                 # if not self.__determine_clashes(moved_chain, limit=10):
-                if not self.is_chain_clashed_v3(moved_chain, limit=10):
+                if not self.__determine_clashes(moved_chain):
                 # -----------------------------------------------------------------------------
                     moved_chain.id = self.__move_next_residue({target_chain.id})
                     self.model.add(moved_chain)
@@ -85,8 +100,7 @@ class MacroFlexEngine(object):
                     next_to_evaluate.label = moved_chain.id
                     self.to_evaluate.append(next_to_evaluate)
 
-                    if self.verbose:
-                        print("Chain added. #%d" % len(self.model))
+                    output_print(f"Chain num {len(self.model)} added.", verbose)
 
                     if len(self.model) >= max_chains:
                         return len(self.model)

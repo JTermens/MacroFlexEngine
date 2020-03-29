@@ -4,9 +4,9 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="PPI",
+    name="MacroFlexEngine",
     version='1.0',
-    description='Protein-Protein Complex Builder',
+    description='Protein-Protein and Protein-DNA/RNA Complex Builder',
     author='Miguel Luengo, Natalia Pattarone, Joan Termens',
     author_email='our emails - TBC',
     url='GitHub Project URL',

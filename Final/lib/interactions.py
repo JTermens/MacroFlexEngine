@@ -1,8 +1,8 @@
 import copy
 import os
-import Final.lib.utils as utils
-from Final.lib.chain import Chain
-from Final.lib.complex import Complex
+import MacroFlexEngine.lib.utils as utils
+from MacroFlexEngine.lib.chain import Chain
+from MacroFlexEngine.lib.complex import Complex
 
 
 class Interactions(object):
@@ -17,7 +17,8 @@ class Interactions(object):
         return list(self.interactions.keys())
 
     def __get_chains(self, input_file):
-        """Returns a set with all the chains found in a PDB file
+        """
+        Returns a set with all the chains found in a PDB file
         Arguments:
          - input_file - string, the PDB file to look for chains
         """
@@ -27,19 +28,20 @@ class Interactions(object):
         return set_chains[:len(set_chains) - 1]
 
     def populate_interactions(self, input_folder):
-        """Populate interactions dictionary with empty homologous
+        """
+        Populate interactions dictionary with empty homologous
         Arguments:
          - input_folder - string, folder to look at for PDB files
         """
         input_files = utils.get_files(input_path=input_folder, allowed_formats={"pdb"})
         if not input_files:
-            raise FileNotFoundError("Folder not found or no files found for the given formats")
+            raise FileNotFoundError(f"The folder {input_folder} not found or no pdb files found on it")
 
         i = 1
         for filename in input_files:
             chains = self.__get_chains(filename)
             for chain in chains:
-                complex_id = "%d:%d" % (i, i + 1)
+                complex_id = f"{i}:{i+1}"
                 try:
                     self.interactions[complex_id].chain_dict[chain] = Chain(chain, self.interactions[complex_id])
                 except KeyError:
@@ -55,6 +57,6 @@ class Interactions(object):
                     homologous_set = chain_item.get_homologous_chains(self.interactions, score_limit)
                     homologous_set.add(chain_item)
                     for chain in homologous_set:
-                        homologous_specific_set = copy.copy(homologous_set)
-                        homologous_specific_set.remove(chain)
-                        chain.homologous_chains = homologous_specific_set
+                        own_homologous_set = copy.copy(homologous_set)
+                        own_homologous_set.remove(chain)
+                        chain.homologous_chains = own_homologous_set
