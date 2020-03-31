@@ -10,12 +10,16 @@ setuptools.setup(
     author='Miguel Luengo, Natalia Pattarone, Joan Termens',
     author_email='our emails - TBC',
     url='GitHub Project URL',
-    packages = ['MacroFlexEngine', 'MacroFlexEngine.lib'],
-    scripts = ['MacroFlexEngine.py'],
+    py_modules=['README', 'MFEngine-launch', 'Alignment/superimposition'],
+    packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
+    ],
+    install_requires=[
+        "biopython >= 1.73",
+        "numpy >= 1.16.2",
     ],
     python_requires='>=3.6',
 )
