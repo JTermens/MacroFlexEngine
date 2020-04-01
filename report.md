@@ -19,9 +19,9 @@ The application uses the BioPython library and it must be installed in your loca
 
 To execute the application the following command can be run
 
-``
+```bash
 python MFEngine-launch -i absolute_path_to_pdb_folder
-``
+```
 As well as the mandatory input flag there are several optional ones:
 -o –output: The output file containing the final complex 
 -v verbose: More detailed process information
