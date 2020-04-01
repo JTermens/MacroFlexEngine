@@ -1,23 +1,24 @@
 ## 1. Introduction
-MacroFlexEngine is a python application that allows the construction of protein and dna macrocomplexes from pdb information of the dimers that form this complex. Furthermore if a fasta file of the whole complex is inputed it will detect which parts of the complex are given and which are missing and complete the missing parts using modeller.
+MacroFlexEngine is a python application that allows the construction of protein and dna macrocomplexes from pdb information of the dimers that form this complex. Furthermore if a fasta file of the whole complex is inputed it will detect which parts of the complex are given and which are missing and complete them using modeller.
 
 ## 2. Running the application
 #### 2.1 Installation
 The application can be installed by running the following commands:
 For linux distributions and Mac ios:
-``
+```bash
 python setup.py sdist
 python setup.py install
-``
+```
 For windows:
-``
+```bash
 python setup.py bdist_wininst
-``
+```
 The application uses the BioPython library and it must be installed in your local python folder in order to use it.
 
 #### 2.2 Execution
 
 To execute the application the following command can be run
+
 ``
 python MFEngine-launch -i absolute_path_to_pdb_folder
 ``
