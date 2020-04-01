@@ -24,9 +24,9 @@ python MFEngine-launch -i absolute_path_to_pdb_folder
 ```
 As well as the mandatory input flag there are several optional ones:
 ```
--o –output: The output file containing the final complex 
--v verbose: More detailed process information
--f -fasta: FASTA file for uncompleted models
+-o --output: The output file containing the final complex 
+-v --verbose: More detailed process information
+-f --fasta: FASTA file for uncompleted models
 ```
 By default the program will output a pdb file with the whole macrocomplex. If a folder is specified the output will be saved there. 
 
