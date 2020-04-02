@@ -33,6 +33,21 @@ def get_files(input_path, allowed_formats):
             result = [os.path.abspath(filename)]
     return result
 
+def get_ca_atoms(chain):
+    """
+    Returns the CA atoms of a chain, or all the atoms in case it doesn't have CA atoms.
+    Arguments:
+        - chain - Bio.PDB.Chain, the chain to get the atoms
+    """
+    result = []
+    if chain.child_list[0].has_id("CA"):
+        for fixed_res in chain:
+            if fixed_res.has_id("CA"):
+                result.append(fixed_res['CA'])
+    else:
+        result = list(chain.get_atoms())
+    return result
+
 
 def output_print(message, verbose):
     if(verbose):

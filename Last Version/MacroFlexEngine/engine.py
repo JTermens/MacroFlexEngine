@@ -1,5 +1,6 @@
 import copy
 import numpy as np
+import sys
 
 from Bio.PDB import NeighborSearch, PDBParser, Selection, Superimposer
 
@@ -7,7 +8,7 @@ import MacroFlexEngine.lib.center_of_mass as cm
 import MacroFlexEngine.lib.interactions as intrc
 
 from MacroFlexEngine.lib.dictionary import chain_dict
-from MacroFlexEngine.lib.utils import output_print
+from MacroFlexEngine.lib.utils import output_print, get_ca_atoms
 
 
 class MacroFlexEngine(object):
@@ -18,7 +19,7 @@ class MacroFlexEngine(object):
         self.model = None
         self.to_evaluate = None
         self.interactions = intrc.Interactions()
-        self.codes_used = None
+        self.codes_used = []
         self.verbose = verbose
 
     def construct_engine(self, input_folder, max_chains=200):
@@ -29,27 +30,21 @@ class MacroFlexEngine(object):
             - max_chains (optional) - int, maximum number of chains
         """
 
-        #------------------------------------------------------------------------------------------
-        # PROPUESTA IMPLEMENTACION MODELER
-        # 
-        # if fasta files in input folder:
-        #   for each fasta file:
-        #       identify chains without structure -> run modeler
-        #       identify chains with structure
-        #       populate interactions with the newly modeled chains and the ones with structure
-        #------------------------------------------------------------------------------------------
+        output_print("Initializing the builder engine...",self.verbose)
 
         self.interactions.populate_interactions(input_folder)
-        self.interactions.populate_homologous_chains(identity=0.95)
 
-        print(self.interactions)
+        output_print(f"Complexes found in PDBs:\n{self.interactions}",self.verbose)
+        output_print(f"Computing chain homologs...",self.verbose)
+
+        self.interactions.populate_homologous_chains(identity=1)
+
+        #sys.exit()
 
         remaining_complexes = self.interactions.get_complexes_list()
 
         parser = PDBParser()
         chain_number = 2
-
-        output_print("Initializing the builder engine...",self.verbose)
 
         structure = None
         while chain_number == 2:
@@ -74,9 +69,17 @@ class MacroFlexEngine(object):
         while self.to_evaluate:
             evaluating_chain = self.to_evaluate.pop(0)
 
+            output_print(f"Evaluating chain: {evaluating_chain.original_label} from "+\
+                evaluating_chain.get_filename(), self.verbose)
+
             for candidate_chain in evaluating_chain.homologous_chains:
                 candidate_complex = candidate_chain.parent
                 complementary_candidate_chain = candidate_complex.complementary_chain(candidate_chain)
+
+                output_print(f"\t-Candidate chain: {candidate_chain.label} form "+\
+                    candidate_chain.get_filename(), self.verbose)
+                output_print(f"\t-Complem.  chain: {complementary_candidate_chain.label} from "+\
+                    complementary_candidate_chain.get_filename(), self.verbose)
 
                 parser = PDBParser()
                 candidate_model = parser.get_structure(candidate_complex.id, candidate_complex.filename)
@@ -84,18 +87,11 @@ class MacroFlexEngine(object):
                 fixed_chain = self.model[evaluating_chain.label]
                 target_chain = candidate_model[0][candidate_chain.original_label]
                 moved_chain = candidate_model[0][complementary_candidate_chain.original_label]
-                # -----------------------------------------------------------------------------
-                # TODO: Here we need to connect Miguel logic for superimposition, proposed connection commented below
-                # self.__Miguel_superimposition(fixed_chain, target_chain, moved_chain)
-                self.__do_superimpose(fixed_chain, target_chain, moved_chain)
-                # -----------------------------------------------------------------------------
-
-                # -----------------------------------------------------------------------------
-                # RESOLVED! TODO: Here we need to connect Joan logic for clashes, proposed connection commented below
-                # if not self.__determine_clashes(moved_chain, limit=10):
+                superimp_done = self.__do_superimpose(fixed_chain, target_chain, moved_chain,1.0)
+                if not superimp_done:
+                    continue
                 if not self.__determine_clashes(moved_chain):
-                # -----------------------------------------------------------------------------
-                    moved_chain.id = self.__move_next_residue({target_chain.id})
+                    moved_chain.id = self.__next_chain_id(set(moved_chain.parent.child_dict))
                     self.model.add(moved_chain)
 
                     next_to_evaluate = copy.copy(complementary_candidate_chain)
@@ -108,26 +104,22 @@ class MacroFlexEngine(object):
                         return len(self.model)
         return len(self.model)
 
-    def __do_superimpose(self,fixed_chain,target_chain,moved_chain):
-        # Here Migue should put his adapted code to handle 3 chains as input
+    def __do_superimpose(self,fixed_chain,target_chain,moved_chain,max_rmsd_100):
 
-        fixed_atoms = []
-        target_atoms = []  
-        
-        for atom in fixed_chain.get_atoms():
-            fixed_atoms.append(atom)
-
-        for atom in target_chain.get_atoms():
-            target_atoms.append(atom)
-
-        if len(fixed_atoms) > len(target_atoms):
-            fixed_atoms = fixed_atoms[0:len(target_atoms)]
-
-        if len(fixed_atoms) < len (target_atoms):
-            target_atoms = target_atoms[0:len(fixed_atoms)]
+        fixed_atoms = get_ca_atoms(fixed_chain)
+        target_atoms = get_ca_atoms(target_chain)
 
         super_imposer = Superimposer()
         super_imposer.set_atoms(fixed_atoms, target_atoms)
+
+        rmsd = super_imposer.rms
+        N = min(len(fixed_atoms),len(target_atoms))
+        rmsd_100 = rmsd/(1+np.log(np.sqrt(N/100)))
+
+        if rmsd_100 > max_rmsd_100:
+            output_print(f"WARNING: rmsd_100 = {rmsd_100} > threshold ({max_rmsd_100}), CHANGING CHAIN...",\
+             self.verbose)
+            return False
         
         moved_chain_atoms = []
 
@@ -135,8 +127,8 @@ class MacroFlexEngine(object):
             moved_chain_atoms.append(residues)
 
         super_imposer.apply(moved_chain_atoms)
+        return True
 
-    # -------------------Joan logic from chain_clashed.py
     def __determine_clashes(self, chain, max_clashes=10):
         """This function returns True if the number of detected clashed is grater than max_clashes
         and False otherwise"""
@@ -176,14 +168,14 @@ class MacroFlexEngine(object):
         """
         return np.linalg.norm(atom.coord - coord)
 
-    def __move_next_residue(self, excluded=None):
+    def __next_chain_id(self, excluded=None):
         """
         Returns the next avaliable chain label in the model
         Arguments:
             - excluded - set, additional set of labels to be omitted
         """
-        if(self.codes_used == None):
-            self.codes_used = [x._id for x in self.model.get_chains()]
+        
+        self.codes_used = [x._id for x in self.model.get_chains()]
 
         for residue in chain_dict:
             if residue not in self.codes_used and residue not in excluded:

@@ -12,6 +12,9 @@ class Interactions(object):
         """Creator of Interactions class"""
         self.interactions = {}
 
+    def __str__(self):
+        return "  -"+"\n  -".join([str(complex_item) for complex_item in self.interactions.values()])
+
     def get_complexes_list(self):
         """Returns a list of the interactions complexes"""
         return list(self.interactions.keys())
@@ -56,10 +59,5 @@ class Interactions(object):
         """Populate the homologous chains from the interactions dict"""
         for complex_item in self.interactions.values():
             for chain_item in complex_item.chain_dict.values():
-                if not chain_item.homologous_chains:
-                    homologous_set = chain_item.get_homologous_chains(self.interactions, identity)
-                    homologous_set.add(chain_item)
-                    for chain in homologous_set:
-                        own_homologous_set = copy.copy(homologous_set)
-                        own_homologous_set.remove(chain)
-                        chain.homologous_chains = own_homologous_set
+                homologous_chains = chain_item.get_homologous_chains(self.interactions, identity)
+                chain_item.homologous_chains = homologous_chains

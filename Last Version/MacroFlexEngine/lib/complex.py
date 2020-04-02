@@ -21,3 +21,9 @@ class Complex(object):
             if chain_item != chain:
                 return chain_item
         return None
+
+    def __str__(self):
+        complex_id = self.id
+        filename = self.filename.split("/")[-1]
+        complex_chains = [str(chain) for chain in self.chain_dict.values()]
+        return 'complex_id: '+complex_id+', filename: '+filename+', complex_chains: '+", ".join(complex_chains)

@@ -1,7 +1,9 @@
 #import Levenshtein
-from Bio.PDB import PDBParser
+from Bio.PDB import PDBParser, Superimposer
 import Bio.pairwise2 as pwise
+
 from Bio.PDB.Polypeptide import PPBuilder
+from MacroFlexEngine.lib.utils import get_ca_atoms
 
 class Chain(object):
     """Class to save the homologous chains of the chain"""
@@ -16,11 +18,27 @@ class Chain(object):
         self.label = label
         self.original_label = label
         self.parent = parent
-        self.homologous_chains = set([])
+        self.type = None
+        self.homologous_chains = []
 
     def __len__(self):
         """Returns the number of homologous chains"""
         return len(self.homologous_chains)
+
+    def __lt__(self,other):
+        """Compares chain objects to allow sorting"""
+        if self.label < other.label:
+            return True
+        elif self.label == other.label:
+            if self.parent.id < other.parent.id:
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    def __str__(self):
+        return self.label
 
     def __get_nucleotides(self, chain):
         """
@@ -30,9 +48,12 @@ class Chain(object):
         """
         return "".join([x.resname.strip() for x in chain.child_list])
 
+    def get_filename(self):
+        return self.parent.filename.split("/")[-1]
+
     def get_homologous_chains(self, interactions, identity=1):
 
-        homologous_set = set([])
+        homologous_list = []
 
         ppb = PPBuilder()
 
@@ -40,12 +61,12 @@ class Chain(object):
         eval_polypeptide = ppb.build_peptides(eval_structure[0][self.original_label])
         eval_sequence = None
         if eval_polypeptide:
-            eval_chain_type = "prot"
+            self.type = "prot"
             eval_sequence = eval_polypeptide[0].get_sequence()
         else:
-            eval_chain_type = "dna/rna"
+            self.type = "dna/rna"
             eval_sequence = self.__get_nucleotides(eval_structure[0][self.original_label])
-
+ 
         for complex_id in interactions.keys():
             complex_structure = PDBParser().get_structure(complex_id, interactions[complex_id].filename)
             for chain_label in interactions[complex_id].chain_dict.keys():
@@ -59,10 +80,11 @@ class Chain(object):
                         target_chain_type = "dna/rna"
                         target_sequence = self.__get_nucleotides(complex_structure[0][chain_label])
 
-                    if target_chain_type == eval_chain_type:
+                    if target_chain_type == self.type:
                         aln = pwise.align.globalxx(str(eval_sequence), str(target_sequence))
                         score = aln[0][2] / len(aln[0][0])
                         if score >= identity:
-                            homologous_set.add(interactions[complex_id].chain_dict[chain_label])
-        return homologous_set
+                            homologous_list.append(interactions[complex_id].chain_dict[chain_label])
+        homologous_list.sort()       
+        return homologous_list
                             
