@@ -1,10 +1,9 @@
 
 
 import numpy as np
-from Bio.PDB import NeighborSearch, PDBParser, Selection, Superimposer
-from Bio.PDB.Polypeptide import PPBuilder
+from Bio.PDB import NeighborSearch, Selection
 
-import center_of_mass as cm
+from Deprecated import center_of_mass as cm
 
 
 ##### Pseudocodigo

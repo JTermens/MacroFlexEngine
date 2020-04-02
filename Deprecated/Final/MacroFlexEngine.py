@@ -3,11 +3,11 @@ import numpy as np
 
 from Bio.PDB import NeighborSearch, PDBParser, Selection
 
-import Final.lib.center_of_mass as cm
-import Final.lib.interactions as intrc
+import Deprecated.Final.lib.center_of_mass as cm
+import Deprecated.Final.lib.interactions as intrc
 
-from Final.lib.dictionary import chain_dict
-from Final.lib.utils import output_print
+from Deprecated.Final.lib.dictionary import chain_dict
+from Deprecated.Final.lib.utils import output_print
 
 
 class MacroFlexEngine(object):

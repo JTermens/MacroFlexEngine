@@ -1,5 +1,5 @@
 .idea/
-/Files/PDBs/
-/Files/TestPDBs/
+/Deprecated/Files/PDBs/
+/Deprecated/Files/TestPDBs/
 __pycache__/
 

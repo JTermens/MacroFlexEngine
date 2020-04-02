@@ -49,7 +49,7 @@ Como ven faltan muchos detalles, pero creo que el esqueleto podría ser algo as�
 * [OnionNet: a Multiple-Layer Intermolecular-Contact-Based Convolutional Neural Network for Protein–Ligand Binding Affinity Prediction](https://pubs.acs.org/doi/full/10.1021/acsomega.9b01997#)
 * [Predicting protein–protein interactions through sequence-based deep learning](https://academic.oup.com/bioinformatics/article/34/17/i802/5093239)
 * [Protein-Protein Interaction Interface Residue Pair Prediction Based on Deep Learning Architecture](https://ieeexplore.ieee.org/document/7932134)
-* [AlphaFold - Improved protein structure prediction using potentials from deep learning](./Files/AlphaFold.pdf) -->
+* [AlphaFold - Improved protein structure prediction using potentials from deep learning](Files/AlphaFold.pdf) -->
 _This last one can be used to understand the input formats and how to codify them (as they use PSSM, PDBs and also HMM files to train their model)_
 
 ## Packages
@@ -87,6 +87,6 @@ For our particular case in which we will be using PDB files as inputs, I was thi
 
 ##### OPTION 2 (https://github.com/hashemifar/DPPI)
 1) Obtained the 2 separated sequences from each part of the complex (i.e. the protein and ligand) construct a tensor with a fixed length (the length of the longer sequence, we need to define which can be a good cut off) x 20 (the amount of aminoacids) 
-2) To represent each of the peptide sequences, by using the PSSM files generated from PSI-BLAST with the option **-out_ascii_pssm** to obtain the specific sequence profile [like this one](./Files/ascii_target.pssm)
+2) To represent each of the peptide sequences, by using the PSSM files generated from PSI-BLAST with the option **-out_ascii_pssm** to obtain the specific sequence profile [like this one](Files/ascii_target.pssm)
 3) Clean-up a bit the file (removing headers, amino acid references of columns and footer information) before use it for training
 4) As we can not use tensors with integers, the best approach is to transform them (vectorization) in a improved representative manner

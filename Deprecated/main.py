@@ -1,5 +1,5 @@
 import numpy as np
-from tensorsHelper import pre_process_pdb_into_vectors, normalize_vector_of_int
+from Deprecated.tensorsHelper import pre_process_pdb_into_vectors, normalize_vector_of_int
 
 pdb_vectors = pre_process_pdb_into_vectors()
 

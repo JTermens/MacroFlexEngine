@@ -1,6 +1,6 @@
 import argparse
 import os
-from Final.MacroFlexEngine import MacroFlexEngine
+from Deprecated.Final.MacroFlexEngine import MacroFlexEngine
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(

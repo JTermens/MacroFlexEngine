@@ -1,5 +1,5 @@
 import os
-from helper import downloadPDBFiles
+from Deprecated.helper import downloadPDBFiles
 from modeller import *
 from modeller.automodel import *
 from modeller.scripts import complete_pdb

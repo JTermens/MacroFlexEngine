@@ -1,11 +1,11 @@
 from __future__ import print_function
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 import rmsd
 
-from tensorsHelper import pre_process_pdb_into_vectors, normalize_vector_of_int
+from Deprecated.tensorsHelper import pre_process_pdb_into_vectors
+
 
 def rotation_matrix(sigma):
     """

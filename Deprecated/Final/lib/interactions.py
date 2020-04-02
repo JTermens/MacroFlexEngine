@@ -1,8 +1,8 @@
 import copy
 import os
-import Final.lib.utils as utils
-from Final.lib.chain import Chain
-from Final.lib.complex import Complex
+import Deprecated.Final.lib.utils as utils
+from Deprecated.Final.lib.chain import Chain
+from Deprecated.Final.lib.complex import Complex
 
 
 class Interactions(object):

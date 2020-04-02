@@ -3,7 +3,7 @@
 # normalize with an integer dictionary the columns that are not numbers (to integers)
 # normalize all data to contain float32 values between 0 and 1 (SD = 1, Mean= 0)
 import os
-from dictionary import atoms_name_dict, residues_code_dict, symbols_dict
+from Deprecated.dictionary import atoms_name_dict, residues_code_dict, symbols_dict
 
 directory = './Files/PDBs'
 files = os.listdir(directory)
