@@ -24,22 +24,19 @@ class MacroFlexEngine(object):
 
     def construct_engine(self, input_folder, max_chains=200):
         """
-        Retruns a Bio.PDB.Structure composed by complex pairs.
+        Returns a Bio.PDB.Structure composed by complex pairs
         Arguments:
             - input_folder - string, a folder containing a list of complex pairs
             - max_chains (optional) - int, maximum number of chains
         """
+        output_print("Initializing the builder engine...", self.verbose)
 
-        output_print("Initializing the builder engine...",self.verbose)
+        self.interactions.populate_interactions(input_folder, self.verbose)
 
-        self.interactions.populate_interactions(input_folder,self.verbose)
-
-        output_print(f"Complexes found in PDBs:\n{self.interactions}",self.verbose)
-        output_print(f"Computing chain homologs...",self.verbose)
+        output_print(f"Complexes found in PDBs:\n{self.interactions}", self.verbose)
+        output_print(f"Computing chain homologs...", self.verbose)
 
         self.interactions.populate_homologous_chains(identity=1)
-
-        #sys.exit()
 
         remaining_complexes = self.interactions.get_complexes_list()
 
@@ -59,7 +56,6 @@ class MacroFlexEngine(object):
         output_print("Model ended", self.verbose)
         return structure
 
-
     def __process_chains(self, max_chains):
         """
         Add chains to a model and return the number of final chains.
@@ -69,17 +65,17 @@ class MacroFlexEngine(object):
         while self.to_evaluate:
             evaluating_chain = self.to_evaluate.pop(0)
 
-            output_print(f"Evaluating chain: {evaluating_chain.original_label} from "+\
-                evaluating_chain.get_filename(), self.verbose)
+            output_print(f"Evaluating chain: {evaluating_chain.original_label} from " + \
+                         evaluating_chain.get_filename(), self.verbose)
 
             for candidate_chain in evaluating_chain.homologous_chains:
                 candidate_complex = candidate_chain.parent
                 complementary_candidate_chain = candidate_complex.complementary_chain(candidate_chain)
 
-                output_print(f"\t-Candidate chain: {candidate_chain.label} form "+\
-                    candidate_chain.get_filename(), self.verbose)
-                output_print(f"\t-Complem.  chain: {complementary_candidate_chain.label} from "+\
-                    complementary_candidate_chain.get_filename(), self.verbose)
+                output_print(f"\t-Candidate chain: {candidate_chain.label} form " + \
+                             candidate_chain.get_filename(), self.verbose)
+                output_print(f"\t-Complem.  chain: {complementary_candidate_chain.label} from " + \
+                             complementary_candidate_chain.get_filename(), self.verbose)
 
                 parser = PDBParser()
                 candidate_model = parser.get_structure(candidate_complex.id, candidate_complex.filename)
@@ -87,7 +83,7 @@ class MacroFlexEngine(object):
                 fixed_chain = self.model[evaluating_chain.label]
                 target_chain = candidate_model[0][candidate_chain.original_label]
                 moved_chain = candidate_model[0][complementary_candidate_chain.original_label]
-                superimp_done = self.__do_superimpose(fixed_chain, target_chain, moved_chain,1.0)
+                superimp_done = self.__do_superimpose(fixed_chain, target_chain, moved_chain, 1.0)
                 if not superimp_done:
                     continue
                 if not self.__determine_clashes(moved_chain):
@@ -98,14 +94,21 @@ class MacroFlexEngine(object):
                     next_to_evaluate.label = moved_chain.id
                     self.to_evaluate.append(next_to_evaluate)
 
-                    output_print(f"Chain num {len(self.model)} added.", self.verbose)
+                    output_print(f"Chain # {len(self.model)} added.", self.verbose)
 
                     if len(self.model) >= max_chains:
                         return len(self.model)
         return len(self.model)
 
-    def __do_superimpose(self,fixed_chain,target_chain,moved_chain,max_rmsd_100):
-
+    def __do_superimpose(self, fixed_chain, target_chain, moved_chain, max_rmsd_100):
+        """
+        Performs superimposition of chains
+        Arguments:
+            - fixed_chain - base chain use for superimpose
+            - target_chain - complementary chain
+            - moved_chain - rotated chain to superimpose on fixed_chain
+            - max_rmsd_100 - normalization cut-off for RMSD assessment
+        """
         fixed_atoms = get_ca_atoms(fixed_chain)
         target_atoms = get_ca_atoms(target_chain)
 
@@ -113,14 +116,14 @@ class MacroFlexEngine(object):
         super_imposer.set_atoms(fixed_atoms, target_atoms)
 
         rmsd = super_imposer.rms
-        N = min(len(fixed_atoms),len(target_atoms))
-        rmsd_100 = rmsd/(1+np.log(np.sqrt(N/100)))
+        N = min(len(fixed_atoms), len(target_atoms))
+        rmsd_100 = rmsd / (1 + np.log(np.sqrt(N / 100)))
 
         if rmsd_100 > max_rmsd_100:
-            output_print(f"WARNING: rmsd_100 = {rmsd_100} > threshold ({max_rmsd_100}), CHANGING CHAIN...",\
-             self.verbose)
+            output_print(f"WARNING: rmsd_100 = {rmsd_100} > threshold ({max_rmsd_100}), CHANGING CHAIN...", \
+                         self.verbose)
             return False
-        
+
         moved_chain_atoms = []
 
         for residues in moved_chain:
@@ -131,10 +134,13 @@ class MacroFlexEngine(object):
 
     def __determine_clashes(self, chain, max_clashes=10):
         """This function returns True if the number of detected clashed is grater than max_clashes
-        and False otherwise"""
-
-        num_clashes = 0 # starts a counter
-        output_print("Analysing possible chain clashes...",self.verbose)
+        and False otherwise
+         Arguments:
+            - chain - base chain for analyze clashes
+            - max_clashes (optional) - maximum number of clashes allowed
+        """
+        num_clashes = 0  # starts a counter
+        output_print("Analysing possible chain clashes...", self.verbose)
 
         model_atoms = Selection.unfold_entities(list(self.model.get_atoms()), 'A')
         neighbor_search = NeighborSearch(model_atoms)
@@ -142,7 +148,7 @@ class MacroFlexEngine(object):
         center = np.array(cm.center_of_mass_chain(chain, 'ATOM'), dtype=float)
         max_radius = max([self.__atom_distance(center, atom) for atom in chain.get_atoms()])
 
-        close_atoms_chain = neighbor_search.search(center, max_radius+2) #add two amstrongs to the max radius
+        close_atoms_chain = neighbor_search.search(center, max_radius + 2)  # add two amstrongs to the max radius
 
         if close_atoms_chain:
             output_print(f"{len(close_atoms_chain)} clashed candidates found", self.verbose)
@@ -151,10 +157,10 @@ class MacroFlexEngine(object):
 
             for residue in chain:
                 for atom in residue:
-                    atom_coord= tuple(atom.get_coord())
-                    close_atoms_atom = neighbor_search.search(atom_coord, 0.8) #CH distance 1.09
+                    atom_coord = tuple(atom.get_coord())
+                    close_atoms_atom = neighbor_search.search(atom_coord, 0.8)  # CH distance 1.09
                     if close_atoms_atom:
-                        num_clashes +=1
+                        num_clashes += 1
                         if num_clashes >= max_clashes:
                             output_print(f"WARNING: {num_clashes} clashes found, CHANGING CHAIN...", self.verbose)
                             return True
@@ -170,11 +176,10 @@ class MacroFlexEngine(object):
 
     def __next_chain_id(self, excluded=None):
         """
-        Returns the next avaliable chain label in the model
+        Returns the next available chain label in the model
         Arguments:
             - excluded - set, additional set of labels to be omitted
         """
-        
         self.codes_used = [x._id for x in self.model.get_chains()]
 
         for residue in chain_dict:
@@ -182,12 +187,16 @@ class MacroFlexEngine(object):
                 return residue
         return None
 
-    def get_model_profile(output_file,file_format):
-
+    def get_model_profile(output_file, file_format):
+        """Produces a profile for the model being analyzed
+         Arguments:
+            - output_file - name of the output file
+            - file_format - extension for the output file
+        """
         # read model file
-        mdl = complete_pdb(output_file+file_format)
+        mdl = complete_pdb(output_file + file_format)
 
         # Assess with DOPE:
         s = selection(mdl)  # all atom selection
-        s.assess_dope(output='ENERGY_PROFILE NO_REPORT', file=output_file+".profile",\
-          normalize_profile=True, smoothing_window=15)
+        s.assess_dope(output='ENERGY_PROFILE NO_REPORT', file=output_file + ".profile", \
+                      normalize_profile=True, smoothing_window=15)
