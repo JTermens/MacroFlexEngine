@@ -144,7 +144,6 @@ class FlexEngineModeller:
         mdl = model(env, file=f'{base_dir}/{self.__unique_template}', model_segment=('FIRST:A', 'LAST:A'))
         aln.append_model(mdl, align_codes=f'{self.__unique_template}A',
                          atom_files=f'{base_dir}/{self.__unique_template}.pdb')
-        print('_________________________________________________________', self.__sequenceCode)
         aln.append(file=self.__sequenceFile, align_codes=self.__sequenceCode)
         aln.align2d()
 
@@ -152,7 +151,7 @@ class FlexEngineModeller:
         aln.write(file=self.__model_alignment, alignment_format='PIR')
         aln.write(file=f'{base_dir}/{self.__sequenceCode}-{self.__unique_template}A.pap', alignment_format='PAP')
 
-    def __buildModel(self, file):
+    def __buildModel(self):
         """ Builds the final Model
         """
         env3 = environ()
@@ -165,53 +164,9 @@ class FlexEngineModeller:
         a.ending_model = 5
         a.make()
 
-        # change output folders
-        pattern = re.compile(r"^(.+)\/")
-        fasta_folder = pattern.match(file)
-
-        pattern = re.compile(r"\/(.+)")
-        filename = pattern.match(file)
-
-        os.system(f"cd {fasta_folder} && mkdir modeller && mkdir pdbs")
-        os.system(f"mv *.pdb pdbs && mv {filename}.* modeller")
-
     def beginProcess(self):
         self.__getProfile()
         self.__getBestTemplatesFromProfile()
         self.__performSequenceIdentityComparison()
         self.__alignTargetSequenceWithTemplate()
         self.__buildModel()
-        return ''
-
-
-def model_fasta(fasta_folder, pdb_folder):
-    """ Main function to start processing fasta files from the given folder, and outputting them on the give output folder
-    Arguments:
-       - fasta_folder - the folder containing all the fasta files
-       - pdb_folder - the output folder
-    """
-    fasta_files = utils.get_files(input_path=fasta_folder, allowed_formats={"fasta", "FASTA", "fa", "pir"})
-    if not fasta_files:
-        raise FileNotFoundError(f"Folder {fasta_folder} not found or no fasta files found in it")
-
-    builder = FlexEngineModeller(fasta_files[0])
-    builder.beginProcess()
-
-    confirm_selection = False
-    while confirm_selection == False:
-        selected_pdb = input('Please, select the best model to build the complex: ')
-
-        if selected_pdb + ".pdb" not in fasta_folder + "/pdbs/":
-            print(f"WARNING: {selected_pdb} not found, chose another one")
-            continue
-
-        make_profile(fasta_folder + "/pdbs/" + selected_pdb + ".pdb", fasta_folder + "/pdbs")
-        show_profile(fasta_folder + "/pdbs/" + selected_pdb + ".profile")
-
-        confirmation = input(f"Do you confirm the {selected_pdb}.pdb file (y/n): ")
-        if confirmation == 'y':
-            confirm_selection = True
-
-    os.system(f"cp {fasta_folder}/pdbs/{selected_pdb}.pdb {pdb_folder}")
-    print(f"Selection confirmed, pdb added to {pdb_folder}")
-    return True

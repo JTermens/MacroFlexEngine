@@ -6,7 +6,36 @@ from Bio.PDB import MMCIFIO, PDBIO
 import MacroFlexEngine.lib.exclude_water as excl
 from MacroFlexEngine.engine import MacroFlexEngine
 from MacroFlexEngine.lib.utils import make_profile, show_profile
-from MacroFlexEngine.Modeller.FlexEngineModeller import model_fasta
+from MacroFlexEngine.Modeller.FlexEngineModeller import FlexEngineModeller
+import MacroFlexEngine.lib.utils as utils
+
+def model_fasta(fasta_folder, pdb_folder):
+    """ Main function to start processing fasta files from the given folder, and outputting them on the give output folder
+    Arguments:
+       - fasta_folder - the folder containing all the fasta files
+       - pdb_folder - the output folder
+    """
+    fasta_files = utils.get_files(input_path=fasta_folder, allowed_formats={"fasta", "FASTA", "fa", "pir"})
+    if not fasta_files:
+        raise FileNotFoundError(f"Folder {fasta_folder} not found or no fasta files found in it")
+
+    for fasta_file in fasta_files:
+        builder = FlexEngineModeller(fasta_file)
+        builder.beginProcess()
+
+    confirm_selection = False
+    while confirm_selection == False:
+        selected_pdb = input('Please, select the best model to build the complex: ')
+
+        make_profile(selected_pdb, ".")
+        show_profile(selected_pdb + ".profile")
+
+        confirmation = input(f"Do you confirm the {selected_pdb} file (y/n): ")
+        if confirmation == 'y':
+            confirm_selection = True
+
+    os.system(f"cp {selected_pdb} {pdb_folder}")
+    print(f"Selection confirmed, pdb added to {pdb_folder}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -33,26 +62,19 @@ if __name__ == "__main__":
                         action="store",
                         default=False,
                         help="Show the energy profile of the output model")
-    parser.add_argument("-s", "--seq",
-                        dest="sequence",
+    parser.add_argument("-f", "--fasta",
+                        dest="fasta",
                         action="store",
                         required=False,
-                        help="folder with sequence files in pir format for uncompleted models")
+                        help="FASTA folder for uncompleted models")
 
     options = parser.parse_args()
-    if not os.path.isdir(os.path.abspath(options.input)):
+    if not os.path.isdir(os.path.abspath(options.input)) or not os.path.isdir(os.path.abspath(options.output)):
         raise IOError("The input is not a folder")
-    if os.path.isdir(os.path.abspath(options.output)):
-        raise IOError("The output is not a file")
 
-    if(options.sequence):
+    if(options.fasta):
         try:
-<<<<<<< HEAD
             model_fasta(options.fasta, options.input)
-=======
-            model.model_sequence(options.sequence, options.input)
-
->>>>>>> 3e5a86ecaf9e50436867fc4dca4c7580a5cd1b61
         except KeyboardInterrupt:
             print("Modeling interrupted by the user...")
 
@@ -78,3 +100,5 @@ if __name__ == "__main__":
     if options.show_profile:
         make_profile(options.output + file_format,options.output)
         show_profile(options.output + ".profile")
+
+
