@@ -1,5 +1,5 @@
 import os
-from Deprecated.helper import downloadPDBFiles
+from Modeller.helper import downloadPDBFiles
 from modeller import *
 from modeller.automodel import *
 from modeller.scripts import complete_pdb
@@ -157,6 +157,7 @@ class ComplexModeller:
         s.assess_dope(output='ENERGY_PROFILE NO_REPORT', file='aux/TvLDH.profile',
                       normalize_profile=True, smoothing_window=15)
 
+
     def beginProcess(self):
         self.__getProfile()
         self.__getBestTemplatesFromProfile()
@@ -167,4 +168,4 @@ class ComplexModeller:
 
 builder = ComplexModeller('aux/TvLDH.ali')
 builder.beginProcess()
-# builder.testModel('TvLDH.B99990001.pdb')
+builder.testModel('TvLDH.B99990001.pdb')
