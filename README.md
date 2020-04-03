@@ -4,7 +4,7 @@
 
 # 1. Introduction
 
-MacroFlexEngine is a python application that allows the construction of protein and dna macrocomplexes from pdb information of the dimers that form this complex. Furthermore if a fasta file of the whole complex is inputed it will detect which parts of the complex are given and which are missing and complete the missing parts using modeller.
+MacroFlexEngine is a python application that allows the construction of protein and dna macrocomplexes from pdb information of the dimers that form this complex. Furthermore if a pir file of the whole complex is inputed it will detect which parts of the complex are given and which are missing and complete the missing parts using modeller.
 
 # 2. Running the application
 
@@ -41,7 +41,7 @@ As well as the mandatory input flag there are several optional ones:
 ```
 -o –output: The output file containing the final complex 
 -v verbose: More detailed process information
--f -fasta: folder with FASTA files for uncompleted models
+-s -seq: folder with sequence files in pir format for uncompleted models
 -p -profile: Show the energy profile of the output model 
 ```
 By default the program will output a pdb file with the whole macrocomplex. If a folder is specified the output will be saved there. 
@@ -51,20 +51,19 @@ The main approach for the building of the complex used in this application is su
 
 
 ## 3.1 Data treatment
-First of all the input dimer pdbs are read and the chains and interactions are saved separately. With these variables saved they can now be compared to the fasta file if it is inputed to check if there is a missing chain.  
+First of all the input dimer pdbs are read and the chains and interactions are saved separately. With these variables saved they can now be compared to the pir file if it is inputed to check if there is a missing chain.  
 
 
 ## 3.2 FlexEngineModeller (using Modeller)
 In cases where there are chains missing, we developed an Engine supported on Modeller to obtain and complete those 
 structures missing a complete PDB. 
 The modelling process are as follow:
-1) As Modeller only recognizes files in PIR format, the sequence FASTA will be converted as needed
-2) Search for potentially related sequences for known structures, utilizing a non-redundant PDB 
+1) Search for potentially related sequences for known structures, utilizing a non-redundant PDB 
 file with sequences at 95% sequence identity from which it creates a bin file
-3) Creates a Modeller profile (which are compacter and better for sequence database searching) containing similar
+2) Creates a Modeller profile (which are compacter and better for sequence database searching) containing similar
 information as alignments do
-4) Searches the PDB database bin file and adds the matches to the profile
-5) Builds the profile using the query sequence and the homologue candidates and selects the best templates. 
+3) Searches the PDB database bin file and adds the matches to the profile
+4) Builds the profile using the query sequence and the homologue candidates and selects the best templates. 
 
 > Note: The PDB code in each line of the profile file built is the representative of a group of PDB sequences that share 
 95% or more sequence identity to each other and have less than 30 residues or 30% sequence length difference. 

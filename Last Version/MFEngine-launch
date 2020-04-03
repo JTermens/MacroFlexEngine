@@ -33,11 +33,11 @@ if __name__ == "__main__":
                         action="store",
                         default=False,
                         help="Show the energy profile of the output model")
-    parser.add_argument("-f", "--fasta",
-                        dest="fasta",
+    parser.add_argument("-s", "--seq",
+                        dest="sequence",
                         action="store",
                         required=False,
-                        help="FASTA folder for uncompleted models")
+                        help="folder with sequence files in pir format for uncompleted models")
 
     options = parser.parse_args()
     if not os.path.isdir(os.path.abspath(options.input)):
@@ -45,9 +45,14 @@ if __name__ == "__main__":
     if os.path.isdir(os.path.abspath(options.output)):
         raise IOError("The output is not a file")
 
-    if(options.fasta):
+    if(options.sequence):
         try:
+<<<<<<< HEAD
             model_fasta(options.fasta, options.input)
+=======
+            model.model_sequence(options.sequence, options.input)
+
+>>>>>>> 3e5a86ecaf9e50436867fc4dca4c7580a5cd1b61
         except KeyboardInterrupt:
             print("Modeling interrupted by the user...")
 
