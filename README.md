@@ -35,7 +35,7 @@ As well as the mandatory input flag there are several optional ones:
 ```
 -o –output: The output file containing the final complex 
 -v verbose: More detailed process information
--f -fasta: FASTA file for uncompleted models
+-f -fasta: folder with FASTA files for uncompleted models
 -p -profile: Show the energy profile of the output model 
 ```
 By default the program will output a pdb file with the whole macrocomplex. If a folder is specified the output will be saved there. 
