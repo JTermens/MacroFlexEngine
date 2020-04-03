@@ -2,6 +2,7 @@ import argparse
 import os
 
 from Bio.PDB import MMCIFIO, PDBIO
+from MacroFlexEngine.lib.utils import make_profile, show_profile
 
 import MacroFlexEngine.lib.exclude_water as excl
 from MacroFlexEngine.engine import MacroFlexEngine
@@ -26,11 +27,16 @@ if __name__ == "__main__":
                         action="store_true",
                         default=False,
                         help="More detailed process information")
+    parser.add_argument("-p", "--profile",
+                        dest="show_profile",
+                        action="store_true",
+                        default=False,
+                        help="Show the energy profile of the output model")
     parser.add_argument("-f", "--fasta",
                         dest="fasta",
                         action="store_true",
                         required=False,
-                        help="FASTA file for uncompleted models")
+                        help="FASTA folder for uncompleted models")
 
     options = parser.parse_args()
     if not os.path.isdir(os.path.abspath(options.input)):
@@ -49,9 +55,14 @@ if __name__ == "__main__":
 
     if len(structure[0]) > 52:
         io = MMCIFIO()
-        io.set_structure(structure)
-        io.save(filepath=options.output + ".cif", select=excl.ExcludeWaterSelect())
+        file_format = ".cif"
     else:
         io = PDBIO()
-        io.set_structure(structure)
-        io.save(file=options.output + ".pdb", select=excl.ExcludeWaterSelect())
+        file_format = ".pdb"
+
+    io.set_structure(structure)
+    io.save(file=options.output + file_format, select=excl.ExcludeWaterSelect())
+
+    if options.show_profile:
+        make_profile(options.output + file_format,options.output)
+        show_profile(options.output + ".profile")
