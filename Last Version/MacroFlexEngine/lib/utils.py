@@ -88,4 +88,5 @@ def show_profile(profile_file):
     pylab.plot(profile_vals, color='red', linewidth=2, label='Model')
     pylab.legend()
     pylab.savefig(profile_file+".png", dpi=65)
+    pylab.show()
 
