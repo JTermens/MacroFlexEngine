@@ -42,6 +42,7 @@ class FlexEngineModeller:
             modeller object containing a database of sequences
         """
         self.__sequenceFile = self.__convertFASTAtoPIR(file)
+        self.__sequenceCode = os.path.splitext(file)[0]
         self.__model_alignment = None
         self.__templates = []
         self.__unique_template = None
@@ -132,17 +133,17 @@ class FlexEngineModeller:
         mdl = model(env, file=f'{base_dir}{self.__unique_template}', model_segment=('FIRST:A', 'LAST:A'))
         aln.append_model(mdl, align_codes=f'{self.__unique_template}A',
                          atom_files=f'{base_dir}{self.__unique_template}.pdb')
-        aln.append(file=self.__sequenceFile, align_codes='TvLDH')
+        aln.append(file=self.__sequenceFile, align_codes=self.__sequenceCode)
         aln.align2d()
 
-        self.__model_alignment = f'{base_dir}TvLDH-{self.__unique_template}A.ali'
+        self.__model_alignment = f'{base_dir}{self.__sequenceCode}-{self.__unique_template}A.ali'
         aln.write(file=self.__model_alignment, alignment_format='PIR')
-        aln.write(file=f'{base_dir}TvLDH-{self.__unique_template}A.pap', alignment_format='PAP')
+        aln.write(file=f'{base_dir}{self.__sequenceCode}-{self.__unique_template}A.pap', alignment_format='PAP')
 
     def __buildModel(self):
         env3 = environ()
         a = automodel(env3, alnfile=self.__model_alignment,
-                      knowns=f'{self.__unique_template}A', sequence='TvLDH',
+                      knowns=f'{self.__unique_template}A', sequence=self.__sequenceCode,
                       assess_methods=(assess.DOPE,
                                       # soap_protein_od.Scorer(),
                                       assess.GA341))
@@ -161,9 +162,8 @@ class FlexEngineModeller:
 
         # Assess with DOPE:
         s = selection(mdl)  # all atom selection
-        s.assess_dope(output='ENERGY_PROFILE NO_REPORT', file='aux/TvLDH.profile',
+        s.assess_dope(output='ENERGY_PROFILE NO_REPORT', file=f'aux/{self.__sequenceCode}.profile',
                       normalize_profile=True, smoothing_window=15)
-
 
     def beginProcess(self):
         self.__getProfile()
