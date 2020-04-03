@@ -9,7 +9,7 @@ MacroFlexEngine is a python application that allows the construction of protein 
 # 2. Running the application
 
 ## 2.1 Requirements
-The application requires Python 3 to be able to run as well as several python modules that will be installed automatically with the setup: 
+The application requires Python 3 to be able to run as well as several python modules that will be installed automatically with the setup.
 ```
 Biopython 1.73
 setuptools 1.16.2
@@ -20,7 +20,7 @@ sys
 re
 pylab
 ```
-The application also uses the modeller software whcih can be installed from [this page](https://salilab.org/modeller/download_installation.html) 
+The application also uses the modeller software which can be installed from [this page.](https://salilab.org/modeller/download_installation.html) 
 ## 2.2 Installation
 The application can be installed by running the following commands:
 For linux distributions and Mac ios:
