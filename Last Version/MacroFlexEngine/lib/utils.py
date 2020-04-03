@@ -1,6 +1,9 @@
 import os
 import os.path
 import re
+from modeller import *
+from modeller.scripts import complete_pdb
+import pylab
 
 
 def get_file_extension(filename):
@@ -52,3 +55,37 @@ def get_ca_atoms(chain):
 def output_print(message, verbose):
     if(verbose):
         print(message)
+
+def make_profile(model,output_file):
+    env = environ()
+    env.libs.topology.read(file='$(LIB)/top_heav.lib')  # read topology
+    env.libs.parameters.read(file='$(LIB)/par.lib')  # read parameters
+
+    # read model file
+    mdl = complete_pdb(env, output_file)
+
+    # Assess with DOPE:
+    s = selection(mdl)  # all atom selection
+    s.assess_dope(output='ENERGY_PROFILE NO_REPORT', file=output_file+".profile",
+                  normalize_profile=True, smoothing_window=15)
+
+def show_profile(profile_file):
+    """Read `profile_file` into a Python array"""
+    # Read all non-comment and non-blank lines from the file:
+    f = open(profile_file)
+    profile_vals = []
+    for line in f:
+        if not line.startswith('#') and len(line) > 10:
+            spl = line.split()
+            profile_vals.append(float(spl[-1]))
+    # Add a gap at position '0', so that we effectively count from 1:
+    profile_vals.insert(0, None)
+
+    # Plot the template and model profiles in the same plot for comparison:
+    pylab.figure(1, figsize=(10,6))
+    pylab.xlabel('Residue position')
+    pylab.ylabel('DOPE per-residue score')
+    pylab.plot(profile_vals, color='red', linewidth=2, label='Model')
+    pylab.legend()
+    pylab.savefig(profile_file+".png", dpi=65)
+
