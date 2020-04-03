@@ -94,7 +94,7 @@ Before moving a chain and adding it to the model the program will check if the n
 
 
 ## 3.6 Output Analysis
-?????????
+Once the superimposition process is complete and a final complex has been found, modeller can be used to evaluate the model. If the flag is added to the input the program will calculate the energy profile of the resulting model using the Discrete Optimized Protein Energy (DOPE) method. 
 
 # 4. Examples
 ## RNA polymerase with promoter DNA and transcription activator
