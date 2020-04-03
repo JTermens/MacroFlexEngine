@@ -36,7 +36,7 @@ As well as the mandatory input flag there are several optional ones:
 -o –output: The output file containing the final complex 
 -v verbose: More detailed process information
 -f -fasta: FASTA file for uncompleted models
--a -analysis: 
+-p -profile: Show the energy profile of the output model 
 ```
 By default the program will output a pdb file with the whole macrocomplex. If a folder is specified the output will be saved there. 
 
@@ -80,7 +80,7 @@ Example of virus capsid built from the repetition of few input chains and their 
 Example of protein microtubul. The original model obtained is very large(around 670000 atoms) so the chimera software could not handle it. The version shown is a segment of the whole complex. Similarly to the virus model this large complex is formed from only a few initial dimers. 
 
 !["microtubul model"](img_results/microtubul_model.png)
-*Fig. 3:Fragment of the microtubul model*
+*Fig. 3: Fragment of the microtubul model*
 
 ## About this document
 
