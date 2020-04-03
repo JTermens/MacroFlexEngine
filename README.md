@@ -90,7 +90,7 @@ in which we based our criteria selection.
 ## 3.3 Alignment
 The alignment process consists of two steps to know which chains of the two structures must be superimposed. In the first place a pairwise sequence alignment of all of the chains is done. If the identity between two chains is higher than a certain score it is considered an homolog and will be superimposed. The identity is calculated with a score of 1 for matches and a value of 0 otherwise with no special gap penalty. Afterwards when the structural alignment for the superimposition is carried out the rmsd is calculated and if the normalised value is lower than 1 Å the chain is discarded and the following is tested. The normalization is done considering 100 residues as in [Caraguo, 2001](10.1110/ps.690101):
 
-![formula](https://render.githubusercontent.com/render/math?math=RMSD_{100} = \frac{RMSD}{1+\ln\left(\sqrt(\frac{N}{100})\right)}),
+<a href="https://www.codecogs.com/eqnedit.php?latex=RMSD_{100}&space;=&space;\frac{RMSD}{1&plus;\ln\sqrt\frac{N}{100}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?RMSD_{100}&space;=&space;\frac{RMSD}{1&plus;\ln\sqrt\frac{N}{100}}" title="RMSD_{100} = \frac{RMSD}{1+\ln\sqrt\frac{N}{100}}" /></a>
 
 Where RMSD<sub>100</sub> is the normalized RMSD to 100 redues and N is the number of residues of the shortest chain.
 
