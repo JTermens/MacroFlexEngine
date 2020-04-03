@@ -61,25 +61,25 @@ Before moving a chain and adding it to the model the program will check if the n
 
 This is an example of a complex protein structure with dna interaction. It has 10 protein chains and a DNA double helix. The input for this complex is the chains that form the complex separated in dimers. The execution time for this complex is around 40 seconds. The model is represented in light brown and the original pdb in light blue.The result is the following.The rmsd was normalised using the formula developed by Carugo and Pongor (2001). The normalised rmsd is calculated as follows, rmsd_100 = rmsd / 1+ln(sqrt(N/100)) where the N is the length of the shortest of the chains.  
 
-!["5nss model"](results/5nss_model.png)
+!["5nss model"](img_results/5nss_model.png)
 *Fig. 1: 5nss model with original complex. RMSD:0*
 
 This result was obtained without modifying the input chains of the intial complex but even when they were moved and rotated randomly the program was still able to obtain very good results with a very low rmsd. The following figure shows that even with added noise the algorithm is able to replicate the reference complex perfectly. 
 
-!["rotated 5nss model"](results/rot5nss_model.png)
+!["rotated 5nss model"](img_results/rot5nss_model.png)
 *Fig. 2: 5nss model with original rotated chains. RMSD:0,001*
 
 
 ## Virus Capsid
 Example of virus capsid built from the repetition of few input chains and their interactions. Here we can see one of the strengths of the program. With only a few chains a macro complex can be formed by adding the same structure until a clash happens when the sphere is already completed.
 
-!["virus capsid model"](results/virus_model.png)
+!["virus capsid model"](img_results/virus_model.png)
 *Fig. 3: Virus capsid model*
 
 ## Microtubul
 Example of protein microtubul. The original model obtained is very large(around 670000 atoms) so the chimera software could not handle it. The version shown is a segment of the whole complex. Similarly to the virus model this large complex is formed from only a few initial dimers. 
 
-!["microtubul model"](results/microtubul_model.png)
+!["microtubul model"](img_results/microtubul_model.png)
 *Fig. 3:Fragment of the microtubul model*
 
 ## About this document
