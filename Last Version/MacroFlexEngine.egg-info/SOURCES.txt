@@ -1,0 +1,17 @@
+MFEngine-launch
+setup.py
+MacroFlexEngine/engine.py
+MacroFlexEngine.egg-info/PKG-INFO
+MacroFlexEngine.egg-info/SOURCES.txt
+MacroFlexEngine.egg-info/dependency_links.txt
+MacroFlexEngine.egg-info/requires.txt
+MacroFlexEngine.egg-info/top_level.txt
+MacroFlexEngine/Modeller/FlexEngineModeller.py
+MacroFlexEngine/Modeller/helper.py
+MacroFlexEngine/lib/center_of_mass.py
+MacroFlexEngine/lib/chain.py
+MacroFlexEngine/lib/complex.py
+MacroFlexEngine/lib/dictionary.py
+MacroFlexEngine/lib/exclude_water.py
+MacroFlexEngine/lib/interactions.py
+MacroFlexEngine/lib/utils.py

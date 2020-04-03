@@ -10,12 +10,12 @@ from modeller.scripts import complete_pdb
 from MacroFlexEngine.lib.utils import make_profile, show_profile
 
 log.verbose()
-base_dir = 'aux/'
-pdb_pir_file = 'aux/pdb_95.pir'
-pdb_bin_file = 'aux/pdb_95.bin'
-profile_file = 'aux/build_profile.prf'
-profile_file_out = 'aux/build_profile.out'
-profile_aln = 'aux/build_profile.ali'
+base_dir = 'MacroFlexEngine/Modeller/aux'
+pdb_pir_file = 'MacroFlexEngine/Modeller/aux/pdb_95.pir'
+pdb_bin_file = 'MacroFlexEngine/Modeller/aux/pdb_95.bin'
+profile_file = 'MacroFlexEngine/Modeller/aux/build_profile.prf'
+profile_file_out = 'MacroFlexEngine/Modeller/aux/build_profile.out'
+profile_aln = 'MacroFlexEngine/Modeller/aux/build_profile.ali'
 
 
 class FlexEngineModeller:
@@ -44,8 +44,9 @@ class FlexEngineModeller:
         __sdb : modeller.sequence_db
             modeller object containing a database of sequences
         """
-        self.__sequenceFile = self.__convertFASTAtoPIR(file)
-        self.__sequenceCode = os.path.splitext(file)[0]
+        self.__sequenceFile = file if file.endswith('.pir') else self.__convertFASTAtoPIR(file)
+        head, tail = os.path.split(file)
+        self.__sequenceCode = tail.split('.')[0]
         self.__model_alignment = None
         self.__templates = []
         self.__unique_template = None
@@ -122,14 +123,14 @@ class FlexEngineModeller:
         for pdb in self.__templates:
             pdb_id = pdb[:4]
             pdb_chain = pdb[4]
-            m = model(local_env, file=f'{base_dir}{pdb[:4]}', model_segment=('FIRST:' + pdb_chain, 'LAST:' + pdb_chain))
+            m = model(local_env, file=f'{base_dir}/{pdb[:4]}', model_segment=('FIRST:' + pdb_chain, 'LAST:' + pdb_chain))
             aln.append_model(m, atom_files=pdb_id, align_codes=pdb_id + pdb_chain)
 
         aln.malign()
         aln.malign3d()
         aln.compare_structures()
-        aln.id_table(matrix_file='aux/family.mat')
-        local_env.dendrogram(matrix_file='aux/family.mat', cluster_cut=-1.0)
+        aln.id_table(matrix_file=f'{base_dir}/family.mat')
+        local_env.dendrogram(matrix_file=f'{base_dir}/family.mat', cluster_cut=-1.0)
 
         self.__unique_template = input(
             'Please, select the best template to perform the model from aux/family.mat file: ')
@@ -140,15 +141,16 @@ class FlexEngineModeller:
         """
         env = environ()
         aln = alignment(env)
-        mdl = model(env, file=f'{base_dir}{self.__unique_template}', model_segment=('FIRST:A', 'LAST:A'))
+        mdl = model(env, file=f'{base_dir}/{self.__unique_template}', model_segment=('FIRST:A', 'LAST:A'))
         aln.append_model(mdl, align_codes=f'{self.__unique_template}A',
-                         atom_files=f'{base_dir}{self.__unique_template}.pdb')
+                         atom_files=f'{base_dir}/{self.__unique_template}.pdb')
+        print('_________________________________________________________', self.__sequenceCode)
         aln.append(file=self.__sequenceFile, align_codes=self.__sequenceCode)
         aln.align2d()
 
-        self.__model_alignment = f'{base_dir}{self.__sequenceCode}-{self.__unique_template}A.ali'
+        self.__model_alignment = f'{base_dir}/{self.__sequenceCode}-{self.__unique_template}A.ali'
         aln.write(file=self.__model_alignment, alignment_format='PIR')
-        aln.write(file=f'{base_dir}{self.__sequenceCode}-{self.__unique_template}A.pap', alignment_format='PAP')
+        aln.write(file=f'{base_dir}/{self.__sequenceCode}-{self.__unique_template}A.pap', alignment_format='PAP')
 
     def __buildModel(self, file):
         """ Builds the final Model
@@ -179,6 +181,7 @@ class FlexEngineModeller:
         self.__performSequenceIdentityComparison()
         self.__alignTargetSequenceWithTemplate()
         self.__buildModel()
+        return ''
 
 
 def model_fasta(fasta_folder, pdb_folder):
@@ -187,13 +190,12 @@ def model_fasta(fasta_folder, pdb_folder):
        - fasta_folder - the folder containing all the fasta files
        - pdb_folder - the output folder
     """
-    fasta_files = utils.get_files(input_path=fasta_folder, allowed_formats={"fasta", "FASTA", "fa"})
+    fasta_files = utils.get_files(input_path=fasta_folder, allowed_formats={"fasta", "FASTA", "fa", "pir"})
     if not fasta_files:
         raise FileNotFoundError(f"Folder {fasta_folder} not found or no fasta files found in it")
 
-    for fasta_file in fasta_files:
-        builder = FlexEngineModeller(fasta_file)
-        builder.beginProcess()
+    builder = FlexEngineModeller(fasta_files[0])
+    builder.beginProcess()
 
     confirm_selection = False
     while confirm_selection == False:
@@ -212,3 +214,4 @@ def model_fasta(fasta_folder, pdb_folder):
 
     os.system(f"cp {fasta_folder}/pdbs/{selected_pdb}.pdb {pdb_folder}")
     print(f"Selection confirmed, pdb added to {pdb_folder}")
+    return True

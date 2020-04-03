@@ -3,11 +3,10 @@ import argparse
 import os
 
 from Bio.PDB import MMCIFIO, PDBIO
-from MacroFlexEngine.lib.utils import make_profile, show_profile
-
 import MacroFlexEngine.lib.exclude_water as excl
 from MacroFlexEngine.engine import MacroFlexEngine
-import MacroFlexEngine.Modeller.FlexEngineModeller as model 
+from MacroFlexEngine.lib.utils import make_profile, show_profile
+from MacroFlexEngine.Modeller.FlexEngineModeller import model_fasta
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -26,17 +25,17 @@ if __name__ == "__main__":
                         help="The output file containing the final complex")
     parser.add_argument('-v', '--verbose',
                         dest="verbose",
-                        action="store_true",
+                        action="store",
                         default=False,
                         help="More detailed process information")
     parser.add_argument("-p", "--profile",
                         dest="show_profile",
-                        action="store_true",
+                        action="store",
                         default=False,
                         help="Show the energy profile of the output model")
     parser.add_argument("-f", "--fasta",
                         dest="fasta",
-                        action="store_true",
+                        action="store",
                         required=False,
                         help="FASTA folder for uncompleted models")
 
@@ -46,11 +45,9 @@ if __name__ == "__main__":
     if os.path.isdir(os.path.abspath(options.output)):
         raise IOError("The output is not a file")
 
-    print(options.fasta)
     if(options.fasta):
         try:
-            model.model_fasta(options.fasta, options.input)
-
+            model_fasta(options.fasta, options.input)
         except KeyboardInterrupt:
             print("Modeling interrupted by the user...")
 
