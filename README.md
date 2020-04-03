@@ -71,6 +71,7 @@ in which we based our criteria selection.
 6) To assess a better template selection we compare structural and sequence similarity between the possible templates, using _malign3d_ command then performs an iterative least-squares superposition of the 3D structures, using the multiple sequence alignment as its starting point. It does not make an alignment, but it calculates the RMS and DRMS deviations between atomic positions and distances, differences between the mainchain and sidechain dihedral angles, percentage sequence identities, and several other measures. Nextly, creates a dendrogram which calculates a clustering tree from the input matrix of pairwise distances, helping visualize differences among the template candidates.
 
 !["Dedrogram example"](img_results/dendrogram.png)
+*Dedrogram example*
 
 7) It requires the user a selection from the dendrogram and table created, for further assessment on template selection
 
