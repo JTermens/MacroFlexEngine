@@ -41,7 +41,7 @@ As well as the mandatory input flag there are several optional ones:
 ```
 -o –output: The output file containing the final complex 
 -v verbose: More detailed process information
--s -seq: folder with sequenc files in pir format for uncompleted models
+-s -seq: folder with sequence files in pir format for uncompleted models
 -p -profile: Show the energy profile of the output model 
 ```
 By default the program will output a pdb file with the whole macrocomplex. If a folder is specified the output will be saved there. 
