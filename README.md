@@ -90,9 +90,9 @@ in which we based our criteria selection.
 ## 3.3 Alignment
 The alignment process consists of two steps to know which chains of the two structures must be superimposed. In the first place a pairwise sequence alignment of all of the chains is done. If the identity between two chains is higher than a certain score it is considered an homolog and will be superimposed. The identity is calculated with a score of 1 for matches and a value of 0 otherwise with no special gap penalty. Afterwards when the structural alignment for the superimposition is carried out the rmsd is calculated and if the normalised value is lower than 1 Å the chain is discarded and the following is tested. The normalization is done considering 100 residues as in [Caraguo, 2001](10.1110/ps.690101):
 
-$$RMSD_{100} = \frac{RMSD}{1+\ln\left(\sqrt(\frac{N}{100})\right)},$$
+![formula](https://render.githubusercontent.com/render/math?math=RMSD_{100} = \frac{RMSD}{1+\ln\left(\sqrt(\frac{N}{100})\right)}),
 
-Where $RMSD_{100}$ is the normalized RMSD to 100 redues and $N$ is the number of residues of the shortest chain.
+Where RMSD<sub>100</sub> is the normalized RMSD to 100 redues and N is the number of residues of the shortest chain.
 
 ## 3.4 Superimposition
 The superimposition is the main part of the program. The process will start with two input dimers. The common chain found in the alignment process will be superimposed and the remaining chain will be moved to form a complex with three chains. Then the process will be repeated with the complex that has been created and another one of the inputed dimers. Each time a new chain is added to the model the program checks if it causes a clash. If there are no clashes the chain is added. This allows the formation of macro-complexes with many repeating units without the need of a stoichometry and the program will always input the most complete protein possible. The algorithm for the clash calculation is explained below. 
@@ -112,12 +112,12 @@ Once the superimposition process is complete and a final complex has been found,
 This is an example of a complex protein structure with dna interaction. It has 10 protein chains and a DNA double helix. The input for this complex is the chains that form the complex separated in dimers. The execution time for this complex is around 40 seconds. The model is represented in light brown and the original pdb in light blue.The result is the following.The rmsd was normalised using the formula developed by Carugo and Pongor (2001). The normalised rmsd is calculated as follows, rmsd_100 = rmsd / 1+ln(sqrt(N/100)) where the N is the length of the shortest of the chains.  
 
 !["5nss model"](img_results/5nss_model.png)
-*Fig. 1: 5nss model with original complex. $RMSD_{100}$:0*
+*Fig. 1: 5nss model with original complex. RMSD<sub>100</sub>:0*
 
 This result was obtained without modifying the input chains of the intial complex but even when they were moved and rotated randomly the program was still able to obtain very good results with a very low rmsd. The following figure shows that even with added noise the algorithm is able to replicate the reference complex perfectly. 
 
 !["rotated 5nss model"](img_results/rot5nss_model.png)
-*Fig. 2: 5nss model with original rotated chains. $RMSD_{100}$:0,001*
+*Fig. 2: 5nss model with original rotated chains. RMSD<sub>100</sub>:0,001*
 
 
 ## Virus Capsid
