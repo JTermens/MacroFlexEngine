@@ -13,7 +13,7 @@ class Interactions(object):
         self.interactions = {}
 
     def __str__(self):
-        return "  -"+"\n  -".join([str(complex_item) for complex_item in self.interactions.values()])
+        return "\t-"+"\n\t-".join([str(complex_item) for complex_item in self.interactions.values()])
 
     def get_complexes_list(self):
         """Returns a list of the interactions complexes"""
@@ -33,7 +33,7 @@ class Interactions(object):
 
         return sorted(list(set_chains))
 
-    def populate_interactions(self, input_folder):
+    def populate_interactions(self, input_folder,verbose):
         """
         Populate interactions dictionary with empty homologous
         Arguments:
@@ -46,6 +46,10 @@ class Interactions(object):
         i = 1
         for filename in input_files:
             chains = self.__get_chains(filename)
+            if len(chains) > 2:
+                filename_reduced = filename.split("/")[-1]
+                utils.output_print(f"WARNING: {len(chains)} chains found on {filename_reduced},this could lead to worse outputs",\
+                 verbose)
             for chain in chains:
                 complex_id = f"{i}:{i+1}"
                 try:

@@ -32,7 +32,7 @@ class MacroFlexEngine(object):
 
         output_print("Initializing the builder engine...",self.verbose)
 
-        self.interactions.populate_interactions(input_folder)
+        self.interactions.populate_interactions(input_folder,self.verbose)
 
         output_print(f"Complexes found in PDBs:\n{self.interactions}",self.verbose)
         output_print(f"Computing chain homologs...",self.verbose)
@@ -181,3 +181,13 @@ class MacroFlexEngine(object):
             if residue not in self.codes_used and residue not in excluded:
                 return residue
         return None
+
+    def get_model_profile(output_file,file_format):
+
+        # read model file
+        mdl = complete_pdb(output_file+file_format)
+
+        # Assess with DOPE:
+        s = selection(mdl)  # all atom selection
+        s.assess_dope(output='ENERGY_PROFILE NO_REPORT', file=output_file+".profile",\
+          normalize_profile=True, smoothing_window=15)

@@ -21,6 +21,7 @@ class Complex(object):
             if chain_item != chain:
                 return chain_item
         return None
+        
 
     def __str__(self):
         complex_id = self.id
