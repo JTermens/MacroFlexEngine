@@ -11,9 +11,15 @@ MacroFlexEngine is a python application that allows the construction of protein 
 ## 2.1 Requirements
 The application requires Python 3 to be able to run as well as several python modules: 
 ```
-Biopython library 
-Modeller
-Numpy 
+Biopython 1.73
+setuptools 1.16.2
+modeller
+numpy
+copy
+os
+sys
+re
+pylab
 ```
 ## 2.2 Installation
 The application can be installed by running the following commands:
