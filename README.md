@@ -88,7 +88,7 @@ in which we based our criteria selection.
 9) Finally, creates (5 in our case) a 3D model of the target automatically, outputig a log file which reports warnings, errors and other useful information including the input restraints used for modeling that remain violated in the final model.
 
 ## 3.3 Alignment
-The alignment process consists of two steps to know which chains of the two structures must be superimposed. In the first place a pairwise sequence alignment of all of the chains is done. If the identity between two chains is higher than a certain score it is considered an homolog and will be superimposed. The identity is calculated with a score of 1 for matches and a value of 0 otherwise with no special gap penalty. Afterwards when the structural alignment for the superimposition is carried out the rmsd is calculated and if the normalised value is lower than 1 Å the chain is discarded and the following is tested. The normalization is done considering 100 residues as in [Caraguo, 2001](10.1110/ps.690101):
+The alignment process consists of two steps to know which chains of the two structures must be superimposed. In the first place a pairwise sequence alignment of all of the chains is done. If the identity between two chains is higher than a certain score it is considered an homolog and will be superimposed. The identity is calculated with a score of 1 for matches and a value of 0 otherwise with no special gap penalty. Afterwards when the structural alignment for the superimposition is carried out the rmsd is calculated and if the normalised value is lower than 1 Å the chain is discarded and the following is tested. The normalization is done considering 100 residues as in [Caraguo, 2001](https://onlinelibrary.wiley.com/doi/full/10.1110/ps.690101):
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=RMSD_{100}&space;=&space;\frac{RMSD}{1&plus;\ln\sqrt\frac{N}{100}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?RMSD_{100}&space;=&space;\frac{RMSD}{1&plus;\ln\sqrt\frac{N}{100}}" title="RMSD_{100} = \frac{RMSD}{1+\ln\sqrt\frac{N}{100}}" /></a>
 
@@ -147,5 +147,5 @@ pandoc -f gfm -t latex                  \
 ```
 ## References
 
-* Carugo O, Pongor S. A normalized root-mean-square distance for comparing protein three-dimensional structures. *Protein Sci.* 2001;10(7):1470–1473. [doi:10.1110/ps.690101](doi:10.1110/ps.690101)
+* Carugo O, Pongor S. A normalized root-mean-square distance for comparing protein three-dimensional structures. *Protein Sci.* 2001;10(7):1470–1473. [doi:10.1110/ps.690101](https://onlinelibrary.wiley.com/doi/full/10.1110/ps.690101)
 
