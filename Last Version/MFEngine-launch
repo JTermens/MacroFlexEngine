@@ -38,7 +38,7 @@ if __name__ == "__main__":
                         dest="sequence",
                         action="store",
                         required=False,
-                        help="sequence folder for uncompleted models, sequences must be in .pir format")
+                        help="folder with sequence files in pir format for uncompleted models")
 
     options = parser.parse_args()
     if not os.path.isdir(os.path.abspath(options.input)):
