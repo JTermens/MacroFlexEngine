@@ -1,7 +1,0 @@
-README.md
-setup.py
-MacroFlexEngine.egg-info/PKG-INFO
-MacroFlexEngine.egg-info/SOURCES.txt
-MacroFlexEngine.egg-info/dependency_links.txt
-MacroFlexEngine.egg-info/requires.txt
-MacroFlexEngine.egg-info/top_level.txt
