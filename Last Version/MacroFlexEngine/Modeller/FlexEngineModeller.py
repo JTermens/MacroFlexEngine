@@ -54,13 +54,17 @@ class FlexEngineModeller:
         self.__initializePDB()
 
     def __convertFASTAtoPIR(self, file):
+        """Convert a fasta file into a PIR file format
+        Arguments:
+            - file - the fasta file you want to convert
+        """
         output_pir_file = f"{os.path.splitext(file)[0]}.pir"
         SeqIO.convert(file, "fasta", output_pir_file, "pir")
 
         return output_pir_file
 
     def __initializePDB(self):
-        """Initializes PDB databases needed for the following processes.
+        """Initializes PDB databases needed for the following processes
         """
         self.__sdb = sequence_db(self.__env)
         self.__sdb.read(seq_database_file=pdb_pir_file, seq_database_format='PIR',
@@ -71,7 +75,7 @@ class FlexEngineModeller:
                         chains_list='ALL')
 
     def __getProfile(self, matrix='blosum62', evalue=0.01):
-        """Creates a profile file for the alignments made with the target sequence.
+        """Creates a profile file for the alignments made with the target sequence
         Parameters
         ----------
         matrix : str, optional
@@ -90,12 +94,12 @@ class FlexEngineModeller:
         aln.write(file=profile_aln, alignment_format='PIR')
 
     def __preProcessProfileFile(self):
-        """Process profile file to a format easy to read and interpret for later use.
+        """Process profile file to a format easy to read and interpret for later use
        """
         os.system("cat " + profile_file + " | tail -n +8 | awk '{print $2, $12}' > " + profile_file_out)
 
     def __getBestTemplatesFromProfile(self):
-        """Obtains a list of the better templates from the profile file.
+        """Obtains a list of the better templates from the profile file
         """
         self.__preProcessProfileFile()
 
@@ -108,6 +112,8 @@ class FlexEngineModeller:
                 self.__templates.append(content[0])
 
     def __performSequenceIdentityComparison(self):
+        """Downloads the PDBs required to perform, then a structure comparison with them
+        """
         downloadPDBFiles(self.__templates, base_dir)
         local_env = environ()
         aln = alignment(local_env)
@@ -129,6 +135,8 @@ class FlexEngineModeller:
         print(self.__unique_template + ' selected! Building the model...')
 
     def __alignTargetSequenceWithTemplate(self):
+        """ Aligns the target sequence with the template selected by the user
+        """
         env = environ()
         aln = alignment(env)
         mdl = model(env, file=f'{base_dir}{self.__unique_template}', model_segment=('FIRST:A', 'LAST:A'))
@@ -142,6 +150,8 @@ class FlexEngineModeller:
         aln.write(file=f'{base_dir}{self.__sequenceCode}-{self.__unique_template}A.pap', alignment_format='PAP')
 
     def __buildModel(self,file):
+        """ Builds the final Model
+        """
         env3 = environ()
         a = automodel(env3, alnfile=self.__model_alignment,
                       knowns=f'{self.__unique_template}A', sequence=self.__sequenceCode,
@@ -171,10 +181,14 @@ class FlexEngineModeller:
 
 
 def model_fasta(fasta_folder, pdb_folder):
-
+    """ Main function to start processing fasta files from the given folder, and outputting them on the give output folder
+    Arguments:
+       - fasta_folder - the folder containing all the fasta files
+       - pdb_folder - the output folder
+    """
     fasta_files = utils.get_files(input_path=fasta_folder, allowed_formats={"fasta","FASTA","fa"})
     if not fasta_files:
-        raise FileNotFoundError(f"The folder {input_folder} not found or no fasta files found on it")
+        raise FileNotFoundError(f"Folder {fasta_folder} not found or no fasta files found in it")
 
     for fasta_file in fasta_files:
         builder = FlexEngineModeller(fasta_file)
@@ -195,6 +209,5 @@ def model_fasta(fasta_folder, pdb_folder):
         if confirmation == 'y':
             confirm_selection = True
 
-    os.system(f"cp {fasta_folder}/pdbs/{selected_pdb}.pdb {input_folder}")
-
+    os.system(f"cp {fasta_folder}/pdbs/{selected_pdb}.pdb {pdb_folder}")
     print(f"Selection confirmed, pdb added to {pdb_folder}")

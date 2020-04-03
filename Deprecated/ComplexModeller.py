@@ -5,9 +5,9 @@ from modeller.automodel import *
 from modeller.scripts import complete_pdb
 
 log.verbose()
-base_dir = 'aux/'
-pdb_pir_file = 'aux/pdb_95.pir'
-pdb_bin_file = 'aux/pdb_95.bin'
+base_dir = '../Last Version/MacroFlexEngine/Modeller/aux/'
+pdb_pir_file = '../Last Version/MacroFlexEngine/Modeller/aux/pdb_95.pir'
+pdb_bin_file = '../Last Version/MacroFlexEngine/Modeller/aux/pdb_95.bin'
 profile_file = 'aux/build_profile.prf'
 profile_file_out = 'aux/build_profile.out'
 profile_aln = 'aux/build_profile.ali'
