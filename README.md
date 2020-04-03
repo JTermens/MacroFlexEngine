@@ -145,5 +145,7 @@ pandoc -f gfm -t latex                  \
        -o report2.pdf	\
           report2.md
 ```
+## References
 
+* Carugo O, Pongor S. A normalized root-mean-square distance for comparing protein three-dimensional structures. *Protein Sci.* 2001;10(7):1470–1473. [doi:10.1110/ps.690101](doi:10.1110/ps.690101)
 
