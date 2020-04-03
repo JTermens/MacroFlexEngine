@@ -1,4 +1,5 @@
 import os
+from Bio import SeqIO
 from Modeller.helper import downloadPDBFiles
 from modeller import *
 from modeller.automodel import *
@@ -13,7 +14,7 @@ profile_file_out = 'aux/build_profile.out'
 profile_aln = 'aux/build_profile.ali'
 
 
-class ComplexModeller:
+class FlexEngineModeller:
     """
     Creates models from incomplete or non existent proteins structures, using the sequence file only
     """
@@ -40,7 +41,7 @@ class ComplexModeller:
         __sdb : modeller.sequence_db
             modeller object containing a database of sequences
         """
-        self.__sequenceFile = file
+        self.__sequenceFile = self.__convertFASTAtoPIR(file)
         self.__model_alignment = None
         self.__templates = []
         self.__unique_template = None
@@ -48,6 +49,12 @@ class ComplexModeller:
         self.__env = environ()
         self.__sdb = None
         self.__initializePDB()
+
+    def __convertFASTAtoPIR(self, file):
+        output_pir_file = f"{os.path.splitext(file)[0]}.pir"
+        SeqIO.convert(file, "fasta", output_pir_file, "pir")
+
+        return output_pir_file
 
     def __initializePDB(self):
         """Initializes PDB databases needed for the following processes.
@@ -166,6 +173,6 @@ class ComplexModeller:
         self.__buildModel()
 
 
-builder = ComplexModeller('aux/TvLDH.ali')
+builder = FlexEngineModeller('aux/TvLDH.ali')
 builder.beginProcess()
 builder.testModel('TvLDH.B99990001.pdb')
